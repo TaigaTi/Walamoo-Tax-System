@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock %}   
+
+{%  block content %} 
+
+    <div id="preferenceContainer" class="container" style="max-width: 60%; margin-top: 10%">
+        <div class="card">
+            <div class="cardContent" style="padding: 5%">
+                <h1 style="text-align: center" class="title">User Preferences</h1>
+                <div class="field">
+                    <label for="textColor" class="label">Text Color</label>
+                    <div class="select is-fullwidth">
+                        <select name="textColorSelect" id="textColorSelect">
+                            <option value="black">Black</option>
+                            <option value="green">Green</option>
+                            <option value="blue">Blue</option>
+                        </select>
+                    </div>  
+                </div>
+            
+                <div class="field">
+                    <label class="label" id="language">Language</label>
+                    <div class="select is-fullwidth">
+                        <select name="languageSelect" id="languageSelect">
+                            <option value="english">ENG</option>
+                            <option value="dfl">DFL</option>
+                        </select>
+                    </div>
+                </div> 
+                <div class="field">
+                    <div class="control is-flex is-justify-content-center">
+                        <input type="button" value="Select" class="button is-success">
+                    </div>
+                </div>  
+                <div class="field">
+                    <div class="control" style="text-align: center">
+                        <label for="check" class="checkbox">
+                            <input type="checkbox">
+                            Remember me
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
