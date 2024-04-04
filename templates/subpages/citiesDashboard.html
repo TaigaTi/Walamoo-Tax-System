@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table is-fullwidth">
     <thead>
         <tr>
             <th>Country Name</th>
@@ -12,4 +12,6 @@
         </tr>
     </tbody>
 </table>
-<button class="button is-success">Return to dashboard</button>
+<div class="buttonContainer is-flex is-justify-content-flex-end">
+    <button class="button is-success" hx-get="{{ url_for('mainDashboard') }}" hx-target="#dashboardContent" hx-swap="innerHTML">Return to dashboard</button>
+</div>

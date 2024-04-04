@@ -4,7 +4,6 @@
 
 {% block content %} 
     <h1 class="title">Dashboard</h1>
-    <div id="dashboardContent" class="dashboardContent">
-        
+    <div id="dashboardContent" class="dashboardContent" hx-get="{{ url_for('mainDashboard') }}" hx-trigger="load" hx-target="#dashboardContent" hx-swap="innerHTML">
     </div>
 {% endblock %}

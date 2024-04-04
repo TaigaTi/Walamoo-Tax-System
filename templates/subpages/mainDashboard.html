@@ -1,25 +1,31 @@
-<div class="recordContainer">
-    <div class="recordTitle">
-        Records In Database
+<div class="recordContainers fixed-grid">
+    <div class="grid">
+        <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
+            <div class="recordTitle">
+                Records In Database
+            </div>
+            <div class="recordValue" id="recordsCount"> { recordsCount } </div>
+        </div>
+        <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
+            <div class="recordTitle">
+                Records In Database
+            </div>
+            <div class="recordValue" id="yearlyTaxPay"> { yearlyTaxPay } </div>
+        </div>
+        <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
+            <div class="recordTitle">
+                Records In Database
+            </div>
+            <div class="recordValue" id="taxPayingCountries"> { taxPayingCountries } </div>
+        </div>
+        <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
+            <div class="recordTitle">
+                Records In Database
+            </div>
+            <div class="recordValue" id="taxPayingCities">{ taxPayingCities }</div>
+        </div>
     </div>
-    <div class="recordValue" id="recordsCount"> { recordsCount } </div>
 </div>
-<div class="recordContainer">
-    <div class="recordTitle">
-        Records In Database
-    </div>
-    <div class="recordValue" id="yearlyTaxPay"> { yearlyTaxPay } </div>
+<div class="buttonContainer is-flex is-justify-content-flex-end">
+    <button class="button is-success" hx-get="{{ url_for('citiesDashboard') }}" hx-target="#dashboardContent" hx-swap="innerHTML">View Cities Per Country</button>
 </div>
-<div class="recordContainer">
-    <div class="recordTitle">
-        Records In Database
-    </div>
-    <div class="recordValue" id="taxPayingCountries"> { taxPayingCountries } </div>
-</div>
-<div class="recordContainer">
-    <div class="recordTitle">
-        Records In Database
-    </div>
-    <div class="recordValue" id="taxPayingCities">{ taxPayingCities }</div>
-</div>
-<button class="button is-success">View Cities Per Country</button>

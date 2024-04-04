@@ -21,6 +21,14 @@ async def preferences(request: Request):
 async def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+@app.get("/subpages/mainDashboard/")
+async def mainDashboard(request: Request):
+    return templates.TemplateResponse("subpages/mainDashboard.html", {"request": request})
+
+@app.get("/subpages/citiesDashboard/")
+async def citiesDashboard(request: Request):
+    return templates.TemplateResponse("subpages/citiesDashboard.html", {"request": request})
+
 @app.get("/alerts/")
 async def alerts(request: Request):
     return templates.TemplateResponse("alerts.html", {"request": request})
