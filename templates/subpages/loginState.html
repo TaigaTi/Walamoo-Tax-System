@@ -1,0 +1,18 @@
+<h1 class="title"> {title} </h1>
+
+<div class="container" style="max-width: 70%;">
+    <h2 class="subtitle">
+        { messageHeader }
+    </h2>
+
+    <div class="icon">
+        <img src="{{ url_for('static', path='icons/{ icon_path }.png') }}" alt="">
+    </div>
+
+    <p class="message">
+        { message }
+    </p>
+    
+    <button class="button is-success">Return to Login</button>
+
+</div>
