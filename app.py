@@ -12,22 +12,27 @@ templates = Jinja2Templates(directory="templates")
 async def index(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-@app.get("/preferences")
+@app.get("/preferences/")
 async def preferences(request: Request):
     return templates.TemplateResponse("userPreferences.html", {"request": request})
 
 
-@app.get("/dashboard")
+@app.get("/dashboard/")
 async def dashboard(request: Request):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
-@app.get("/query")
+@app.get("/alerts/")
+async def alerts(request: Request):
+    return templates.TemplateResponse("alerts.html", {"request": request})
+
+@app.get("/query/")
 async def query(request: Request):
     return templates.TemplateResponse("query.html", {"request": request})
 
-@app.get("/xml")
+@app.get("/xml/")
 async def xml(request: Request):
     return templates.TemplateResponse("xml.html", {"request": request})
+
 
 if __name__ == "__main__":
     import uvicorn

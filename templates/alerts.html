@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %} Thresholds {% endblock %}
+
+{% block content %}
+
+    <div id="thresholdContainer">
+        <h1 class="title">Alerts / Thresholds</h1>
+        <div class="container is-flex">
+            <div class="container">
+                <h2 class="subtitle">Enter Criteria</h2>
+                <form action="">
+                    <div class="is-flex is-justify-content-space-between">
+                        <div class="field">
+                            <label for="min_tax" class="label">Minimum Tax</label>
+                            <input type="number" name="min_tax" id="min_tax" class="input">
+                        </div>
+                        <div class="field">
+                            <label for="max_tax" class="label">Maximum Tax</label>
+                            <input type="number" name="max_tax" id="max_tax" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="min_rev" class="label">Minimum Revenue</label>
+                        <div class="control">
+                            <input type="number" name="min_rev" id="min_rev" class="input">
+                        </div>
+                    </div>
+                    <div class="is-flex is-justify-content-space-around control">
+                        <label for="paid" class="radio">
+                            <input type="radio" name="paid" id="paid" class="radio">
+                            Did not pay</label>
+                        <label for="paid" class="radio">
+                            <input type="radio" name="paid" id="paid" class="radio">
+                            Did Pay</label>
+                    </div>
+                    <div class="field">
+                        <label for="deadline_month" class="label">Deadline Month</label>
+                        <div class="select">
+                            <select name="deadline_month" id="deadline_month">
+                                <option value="jan">January</option>
+                                <option value="feb">February</option>
+                                <option value="mar">March</option>
+                                <option value="apr">April</option>
+                                <option value="may">May</option>
+                                <option value="jun">June</option>
+                                <option value="jul">July</option>
+                                <option value="aug">August</option>
+                                <option value="sep">September</option>
+                                <option value="oct">October</option>
+                                <option value="nov">November</option>
+                                <option value="dec">December</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="notify" class="checkbox">
+                            Notify me when criteria is met
+                            <input type="checkbox" name="notify" id="notify" class="checkbox">
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="container">
+                <div id="buttonDiv" style="width: 60%">
+                    <button class="button is-primary is-fullwidth">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
