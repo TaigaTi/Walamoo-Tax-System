@@ -33,6 +33,10 @@ async def citiesDashboard(request: Request):
 async def alerts(request: Request):
     return templates.TemplateResponse("alerts.html", {"request": request})
 
+@app.get("/scenarios")
+async def scenarios(request: Request):
+    return templates.TemplateResponse("scenarios.html", {"request" : request})
+
 @app.get("/query/")
 async def query(request: Request):
     return templates.TemplateResponse("query.html", {"request": request})
