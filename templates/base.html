@@ -5,10 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Walamoo - {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='styles/style.css') }}">
+    
 </head>
 <body>
-    <div class="mainContainer">{% block content %}{% endblock %}</div>
+    <header class="is-flex is-justify-content-space-between is-align-items-center">
+            <span id="title" class="is-flex is-align-items-center" style="flex: 2">
+                <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
+                <h1>Walamoo Tax System </h1>
+            </span>
+            <span id="nav" class="is-flex is-justify-content-space-evenly is-flex-grow-1">
+                {% block nav %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('query') }}">Query</a>
+                    <a href="{{ url_for('xml') }}">XML</a>
+                    <span class="icon">
+                        <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px">
+                    </span>
+                {% endblock %}
+            </span>
+    </header>
+    <section>
+        <div class="container">{% block content %}{% endblock %}</div>
+    </section>
+
 </body>
-<script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
+<script src="{{ url_for('static', path='scripts/index.js') }}"></script>
 </html>
