@@ -11,17 +11,17 @@
 <body>
     <header class="is-flex is-justify-content-space-between is-align-items-center">
             <span id="title" style="flex: 2">
-                <a href="{{ url_for('dashboard') }}" class="is-flex is-align-items-center" >
+                <span target="{{ url_for('dashboard') }}" class="is-flex is-align-items-center quiet-link" aria-label="Home" title="Home">
                     <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
                     <h1>Walamoo Tax System </h1>
-                </a>
+                </span>
             </span>
             <span id="nav" class="is-flex is-justify-content-space-evenly is-flex-grow-1">
                 {% block nav %}
-                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a href="{{ url_for('query') }}">Query</a>
-                    <a href="{{ url_for('xml') }}">XML</a>
-                    <span class="icon">
+                    <span target="{{ url_for('dashboard') }}" class="nav-link" aria-label="Dashboard" title="Dashboard">Dashboard</span>
+                    <span target="{{ url_for('query') }}" class="nav-link" aria-label="Query" title="Query">Query</span>
+                    <span target="{{ url_for('xml') }}" class="nav-link" aria-label="XML Reload" title="XML Reload">XML</span>
+                    <span class="icon has-background-grey-light" style="border-radius: 50%;">
                         <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px">
                     </span>
                 {% endblock %}
@@ -32,6 +32,17 @@
     </section>
 
 </body>
-<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+
+<script>
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", () => {
+            navigate(link.getAttribute("target"))
+        })
+    })
+</script>
+
 <script src="{{ url_for('static', path='scripts/index.js') }}"></script>
+<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
 </html>
