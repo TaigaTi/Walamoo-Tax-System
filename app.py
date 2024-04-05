@@ -78,12 +78,12 @@ async def xml(request: Request):
 async def logs(request: Request):
     return templates.TemplateResponse("logs.html", {"request": request})
 
-@app.get("/users/{user_id}", response_model=User)
-async def get_user(user_id: int):
-    user = await user_collection.find_one({"id": user_id})
-    if user:
-        return user
-    raise HTTPException(status_code=404, detail="User not found")
+# @app.get("/users/{user_id}", response_model=User)
+# async def get_user(user_id: int):
+#     user = await user_collection.find_one({"id": user_id})
+#     if user:
+#         return user
+#     raise HTTPException(status_code=404, detail="User not found")
 
 if __name__ == "__main__":
     import uvicorn
