@@ -46,7 +46,7 @@ async def index(user: User = Depends(manager.optional)):
 
 @app.get("/login/")
 async def login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request, "user": None})
 
 @app.post("/login/")
 async def login(response: Response, data: OAuth2PasswordRequestForm = Depends()):
@@ -76,23 +76,23 @@ async def logout(request: Request, response: Response, user: User = Depends(mana
 
 @app.get("/preferences/")
 async def preferences(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("userPreferences.html", {"request": request})
+    return templates.TemplateResponse("userPreferences.html", {"request": request, "user": user})
 
 @app.get("/dashboard/")
 async def dashboard(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+    return templates.TemplateResponse("dashboard.html", {"request": request, "user": user})
 
 @app.get("/subpages/mainDashboard/")
 async def mainDashboard(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("subpages/mainDashboard.html", {"request": request})
+    return templates.TemplateResponse("subpages/mainDashboard.html", {"request": request, "user": user})
 
 @app.get("/subpages/citiesDashboard/")
 async def citiesDashboard(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("subpages/citiesDashboard.html", {"request": request})
+    return templates.TemplateResponse("subpages/citiesDashboard.html", {"request": request, "user": user})
 
 @app.get("/alerts/")
 async def alerts(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("alerts.html", {"request": request})
+    return templates.TemplateResponse("alerts.html", {"request": request, "user": user})
 
 @app.post("/alerts/")
 async def alerts(alert : Alert, user: User = Depends(manager)):
@@ -105,7 +105,7 @@ async def alerts(alert : Alert, user: User = Depends(manager)):
 
 @app.get("/scenarios/")
 async def scenarios(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("scenarios.html", {"request" : request})
+    return templates.TemplateResponse("scenarios.html", {"request" : request, "user": user})
 
 @app.get("/subpages/scenarioInformation/")
 async def scenarioInformation(request: Request, user: User = Depends(manager)):
@@ -131,6 +131,7 @@ async def scenarioInformation(request: Request, user: User = Depends(manager)):
 
     return templates.TemplateResponse("subpages/scenarioInformation.html", {
         "request" : request,
+        "user": user,
         "insufficient_taxpayers": set([tp.company for tp in insufficient_taxpayers]),
         "sufficient_taxpayers": set([tp.company for tp in sufficient_taxpayers]),
         "revenue": revenue,
@@ -140,11 +141,11 @@ async def scenarioInformation(request: Request, user: User = Depends(manager)):
 
 @app.get("/report/")
 async def report(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("scenarioReport.html", {"request": request})
+    return templates.TemplateResponse("scenarioReport.html", {"request": request, "user": user})
 
 @app.get("/recon/")
 async def recon(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("recon.html", {"request": request})
+    return templates.TemplateResponse("recon.html", {"request": request, "user": user})
 
 @app.get("/recon/view_local_statement")
 async def view_local_statement(request: Request, user: User = Depends(manager)):
@@ -154,31 +155,33 @@ async def view_local_statement(request: Request, user: User = Depends(manager)):
         tp = TaxPayer(**taxpayer)
         taxpayers.append(tp)
 
-    return templates.TemplateResponse("subpages/queryReport.html", {"request": request, "taxpayers": taxpayers, "totalRecords": len(taxpayers)})
+    return templates.TemplateResponse("subpages/queryReport.html", {"request": request, "user": user, "taxpayers": taxpayers, "totalRecords": len(taxpayers)})
 
 @app.get("/query/")
 async def query(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("query.html", {"request": request})
+    return templates.TemplateResponse("query.html", {"request": request, "user": user})
 
 @app.get("/subpages/queryMenu/")
 async def queryMenu(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("subpages/queryMenu.html", {"request": request})
+    return templates.TemplateResponse("subpages/queryMenu.html", {"request": request, "user": user})
 
 @app.get("/subpages/guidedQuery/")
 async def guidedQuery(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("subpages/guidedQuery.html", {"request": request})
+    return templates.TemplateResponse("subpages/guidedQuery.html", {"request": request, "user": user})
 
 @app.get("/subpages/adhocQuery/")
 async def adhocQuery(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("subpages/adhocQuery.html", {"request": request})
+    return templates.TemplateResponse("subpages/adhocQuery.html", {"request": request, "user": user})
 
 @app.get("/xml/")
 async def xml(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("dataReload.html", {"request": request})
+    return templates.TemplateResponse("dataReload.html", {"request": request, "user": user})
 
 @app.get("/logs/")
 async def logs(request: Request, user: User = Depends(manager)):
-    return templates.TemplateResponse("logs.html", {"request": request})
+    if not user["is_admin"]:
+        raise HTTPException(status_code=403, detail="Not authorized to access this resource")
+    return templates.TemplateResponse("logs.html", {"request": request, "user": user})
 
 @app.post("/api/v1/taxpayers/add/")
 async def add_taxpayer(taxpayer: TaxPayer):
