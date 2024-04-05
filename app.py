@@ -37,6 +37,10 @@ async def alerts(request: Request):
 async def scenarios(request: Request):
     return templates.TemplateResponse("scenarios.html", {"request" : request})
 
+@app.get("/subpages/scenarioInformation")
+async def scenarioInformation(request: Request):
+    return templates.TemplateResponse("subpages/scenarioInformation.html", {"request" : request})
+
 @app.get("/query/")
 async def query(request: Request):
     return templates.TemplateResponse("query.html", {"request": request})
