@@ -81,11 +81,7 @@
         const notpaid = document.getElementById('notpaid').checked;
         const deadline_month = document.getElementById('deadline_month').value;
         const notify = document.getElementById('notify').checked;
-
-        const jsonData = JSON.stringify(
-            Object.fromEntries(data.entries())
-        )
-
+        
         const applyButton = document.getElementById("applyButton");
         applyButton.classList.add("is-loading");
 
@@ -109,11 +105,13 @@
 
         if (response.status === 200) {
             const data = await response.json();
+            console.log(data);
             alert(data.success);
             navigate("{{ url_for('alerts') }}");
         } 
         else {
             const data = await response.json();
+            console.log(data);
             alert(data.error);
         }
         applyButton.classList.remove("is-loading");

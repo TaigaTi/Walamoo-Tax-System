@@ -101,7 +101,34 @@ async def scenarios(request: Request):
 
 @app.get("/subpages/scenarioInformation/")
 async def scenarioInformation(request: Request):
-    return templates.TemplateResponse("subpages/scenarioInformation.html", {"request" : request})
+    check_alert: dict = await alert_collection.find_one({})
+    if not check_alert:
+        raise HTTPException(status_code=404, detail="No alerts found")
+    
+    alert: Alert = Alert(**check_alert)
+
+    insufficient_taxpayers = []
+    sufficient_taxpayers = []
+
+    async for taxpayer in taxpayer_collection.find():
+        tp = TaxPayer(**taxpayer)
+        if tp.tax < alert.min_tax:
+            insufficient_taxpayers.append(tp)
+        elif tp.tax >= alert.min_tax:
+            sufficient_taxpayers.append(tp)
+
+    revenue = sum([taxpayer.tax for taxpayer in sufficient_taxpayers])
+
+    minimum_revenue = "Exceeded" if revenue >= alert.min_revenue else "Not Exceeded"
+
+    return templates.TemplateResponse("subpages/scenarioInformation.html", {
+        "request" : request,
+        "insufficient_taxpayers": set([tp.company for tp in insufficient_taxpayers]),
+        "sufficient_taxpayers": set([tp.company for tp in sufficient_taxpayers]),
+        "revenue": revenue,
+        "minimum_revenue": minimum_revenue,
+        "sufficient_count": len(sufficient_taxpayers)
+    })
 
 @app.get("/report/")
 async def report(request: Request):

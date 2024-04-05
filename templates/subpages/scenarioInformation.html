@@ -1,31 +1,44 @@
 <div class="container fixed-grid">
     <div class="grid">
-        <div class="cell" id="insufficientTaxes">
+        <div class="cell" id="insufficientTaxesDiv">
             <h2 class="subtitle">Companies with Insufficient Taxes</h2>
-            <ul>
-                <li>Example company 1</li>
-                <li>Example company 2</li>
+            <ul id="insufficientTaxes">
+                {% if insufficient_taxpayers %}
+                    {% for weak_taxpayer in insufficient_taxpayers %}
+                        <li>{{ weak_taxpayer }}</li>
+                    {% endfor %}
+                    
+                {% else %}
+                    <h3>Everyone paid enough?</h3>
+                {% endif %}
             </ul>
         </div>
-        <div class="cell" id="paidCompanies">
+        <div class="cell" id="paidCompaniesDiv">
             <h2 class="subtitle">Companies that paid</h2>
-            <ul>
-                <li>Example company 3</li>
-                <li>Example company 4</li>
+            <ul id="paidCompanies">
+                {% if sufficient_taxpayers %}
+                    {% for paid_company in sufficient_taxpayers %}
+                        <li>{{ paid_company }}</li>
+                    {% endfor %}
+                
+                {% else %}
+                    <h3>No one paid enough?</h3>
+                {% endif %}
             </ul>
         </div>
-        <div class="cell" id="revenue">
+        <div class="cell" id="revenueDiv">
             <ul>
-                <li>Minimum Revenue: <span id="minRevenueStatus">Exceeded</span> </li>
-                <li>Companies with sufficient tax: <span id="sufficientTax">43</span></li>
+                <li>Total Revenue: $<span id="totalRevenue">{{ revenue }}</span> </li>
+                <li>Minimum Revenue: <span id="minRevenueStatus">{{ minimum_revenue }}</span> </li>
+                <li>Companies with sufficient tax: <span id="sufficientTax"> {{ sufficient_count }} </span></li>
             </ul>
         </div>
-        <div class="cell" id="unpaidCompanies">
+        <!-- <div class="cell" id="nonPaidCompaniesDiv">
             <h2 class="subtitle">Companies that did not pay</h2>
-            <ul>
+            <ul id="nonPaidCompanies">
                 <li>Example company 1</li>
                 <li>Example company 5</li>
             </ul>
-        </div>
+        </div> -->
     </div>
 </div>
