@@ -47,18 +47,13 @@
         </div>
     </nav>
     <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
-        <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
-        <hr>
-        <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
-        <hr>
-        <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
-        <hr>
-        <span target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</span>
-        <hr>
-        <span target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
-        <hr>
+        <div target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</div>
+        <div target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</div>
+        <div target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</div>
+        <div target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</div>
+        <div target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</div>
     </div>
-    <section>
+    <section class="section">
         <div class="container">{% block content %}{% endblock %}</div>
     </section>
 

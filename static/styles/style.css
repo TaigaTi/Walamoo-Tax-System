@@ -10,3 +10,9 @@
     text-decoration: underline;
     color: rgb(159, 159, 244);
 }
+
+#menu .nav-link{
+    border-top: 1px solid black;
+    padding: 0.7em;
+    margin: 0.3em;
+}
