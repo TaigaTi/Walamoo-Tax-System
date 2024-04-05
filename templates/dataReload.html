@@ -16,8 +16,7 @@
         const errorContent = `
             <h1 class='title'>Upload Failed!</h1>
             <img src="{{ url_for('static', path='images/error.png') }}" alt="Upload Failed!" width="150px" height="150px">
-            <p> File was not uploaded or contained invalid data.</p>
-            <p> Check your connection and try again. </p>
+            { message goes here}
             <button class="button is-danger" onclick="changeContent('default')"> Reload System XML Data </button>`
     
         const defaultContent = `
@@ -31,12 +30,21 @@
             "default": defaultContent
         }
     
-        const changeContent = (contentKey) => {
-            document.getElementById("reloadContainer").innerHTML = contentKeys[contentKey]
+        const changeContent = (contentKey, message=undefined) => {
+
+            if (contentKey === "error" && message) {
+                let errorMessage = message.toString();
+                console.log(errorMessage);
+                document.getElementById("reloadContainer").innerHTML = errorContent.replace("{ message goes here}", `Error: ${errorMessage}`);
+            } else {
+                document.getElementById("reloadContainer").innerHTML = contentKeys[contentKey]
+            }
         }
 
         const parseXML = (xml) => {
             const curFiles = xml.files;
+
+            let error_message = undefined
 
             if (curFiles.length == 0) {
                 changeContent("error");
@@ -47,6 +55,11 @@
             let reader = new FileReader();
             reader.readAsText(file);
             
+            reader.onerror = () => {
+                console.log("Error reading file: " + reader.error);
+                changeContent("error");
+                return
+            }
             reader.onloadend = () => {
                 let xmlData = reader.result;
                 
@@ -58,48 +71,68 @@
                     taxpayers = xmlDoc.getElementsByTagName("taxpayer");
 
                     if (taxpayers.length == 0) {
-                        changeContent("error");
+                        changeContent("error", "No taxpayers found");
                         return;
                     }
                     
                     let valid = true;
 
-                    for (let taxpayer of taxpayers){
-                        if (!valid) {
-                            changeContent("error");
-                            return
-                        }
-                        let taxpayer_id = taxpayer.getAttribute("id");
-                        let company = taxpayer.getElementsByTagName("company")[0].childNodes[0].nodeValue;
-                        let street = taxpayer.getElementsByTagName("street")[0].childNodes[0].nodeValue;
-                        let city = taxpayer.getElementsByTagName("city")[0].childNodes[0].nodeValue;
-                        let country = taxpayer.getElementsByTagName("country")[0].childNodes[0].nodeValue;
-                        let tax = taxpayer.getElementsByTagName("tax")[0].childNodes[0].nodeValue;
-    
-                        fetch("{{ url_for('add_taxpayer') }}", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                "payer_id": taxpayer_id,
-                                "company": company,
-                                "street": street,
-                                "city": city,
-                                "country": country,
-                                "tax": tax
-                            })
-                        }).then((response) => {
-                            if (!response.ok) {
-                                valid = false
-                                changeContent("error");
+                    const addTaxpayerPromises = [];
+                    for (let taxpayer of taxpayers) {
+                        const taxpayerAttrs = ["id", "company", "street", "city", "country", "tax"];
+                        for (const attr of taxpayerAttrs) {
+                            if (attr === "id") {
+                                if (!taxpayer.getAttribute(attr)){
+                                    error_message = "Failed to get ID from a taxpayer";
+                                    valid = false; 
+                                    break
+                                }
                             }
-                        })
+                            else if (!taxpayer.getElementsByTagName(attr)[0] || !taxpayer.getElementsByTagName(attr)[0].childNodes[0].nodeValue) {
+                                error_message = "Failed to get " + attr + " from taxpayer " + taxpayer.getAttribute("id");
+                                valid = false;
+                                break;
+                            }
+                        }
+                        
+                        if (!valid) {
+                            break;
+                        }
+
+                        const taxpayer_id = taxpayer.getAttribute("id");
+                        const company = taxpayer.getElementsByTagName("company")[0].childNodes[0].nodeValue;
+                        const street = taxpayer.getElementsByTagName("street")[0].childNodes[0].nodeValue;
+                        const city = taxpayer.getElementsByTagName("city")[0].childNodes[0].nodeValue;
+                        const country = taxpayer.getElementsByTagName("country")[0].childNodes[0].nodeValue;
+                        const tax = taxpayer.getElementsByTagName("tax")[0].childNodes[0].nodeValue;
+
+                        addTaxpayerPromises.push(
+                            fetch("{{ url_for('add_taxpayer') }}", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    "payer_id": taxpayer_id,
+                                    "company": company,
+                                    "street": street,
+                                    "city": city,
+                                    "country": country,
+                                    "tax": tax
+                                })
+                            })
+                        );
+                    }
+                    
+                    if (!valid) {
+                        changeContent("error", error_message);
+                        return;
                     }
 
-                    if (valid) {
-                        changeContent("success");
-                    }
+                    Promise.all(addTaxpayerPromises).then(responses => {
+                        valid = responses.every(response => response.ok);
+                        changeContent( valid ? "success" : "error", error_message);
+                    });
 
                 }
             }
