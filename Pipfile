@@ -9,6 +9,7 @@ uvicorn = "*"
 motor = "*"
 pydantic = "*"
 python-multipart = "*"
+fastapi-login = "*"
 
 [dev-packages]
 

@@ -1,11 +1,24 @@
-from fastapi import FastAPI, Request, HTTPException
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
+
+from fastapi import FastAPI, Request, HTTPException, Depends
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.security import OAuth2PasswordRequestForm
+
+from fastapi_login import LoginManager
+from fastapi_login.exceptions import InvalidCredentialsException
 
 from models import *
 from database import *
 
 app = FastAPI()
+
+SECRET = getenv("SECRET_KEY")
+manager = LoginManager(SECRET, "/login")
 
 app.include_router(db_router)
 
@@ -13,14 +26,39 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
+@manager.user_loader()
+async def get_user_by_id(user_id: str):
+    user = await user_collection.find_one({"user_id": user_id})
+    return user
+
 @app.get("/")
-async def index(request: Request):
+async def index(user: User = Depends(manager.optional)):
+    if user is None:
+        return RedirectResponse("/login/")
+    return RedirectResponse("/dashboard/")
+
+@app.get("/login/")
+async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
+@app.post("/login/")
+async def login(data: OAuth2PasswordRequestForm = Depends()):
+    user_id = data.username
+    password = data.password
+
+    user = await get_user_by_id(user_id)
+    if not user:
+        raise InvalidCredentialsException
+    print(user, user_id, password)
+    if user["password"] != password:
+        raise InvalidCredentialsException
+    
+    access_token = manager.create_access_token(data={"sub": user_id})
+    return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/preferences/")
 async def preferences(request: Request):
     return templates.TemplateResponse("userPreferences.html", {"request": request})
-
 
 @app.get("/dashboard/")
 async def dashboard(request: Request):
@@ -92,13 +130,6 @@ async def get_all_taxpayers():
     async for taxpayer in taxpayer_collection.find():
         all_taxpayers.append(taxpayer)
     return all_taxpayers
-
-# @app.get("/users/{user_id}", response_model=User)
-# async def get_user(user_id: int):
-#     user = await user_collection.find_one({"id": user_id})
-#     if user:
-#         return user
-#     raise HTTPException(status_code=404, detail="User not found")
 
 if __name__ == "__main__":
     import uvicorn
