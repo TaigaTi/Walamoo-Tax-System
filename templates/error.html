@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block nav %}{% endblock %}
+
+{% block title %} Error! {% endblock %}
+
+{% block content %}
+<section class="section is-fullwidth" style="height: 90vh;">
+    <div class="container is-fullwidth is-flex is-justify-content-center is-flex-direction-column is-align-items-center" style="height: 70vh;">
+        <h1 class="title">Uh Oh! </h1>
+        <p><span class="subtitle">Error {{ status_code }}</span>: {{ detail }}</p>
+        <a href="{{ url_for('dashboard') }}">Go back to the Dashboard</a>
+    </div>
+</section>
+{% endblock %}

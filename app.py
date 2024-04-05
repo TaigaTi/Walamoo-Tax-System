@@ -12,19 +12,17 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
 
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
 from fastapi_login import LoginManager
 from fastapi_login.exceptions import InvalidCredentialsException
 
 from models import *
 from database import *
 
+from manager import manager, NotAuthenticatedException
+
 app = FastAPI()
-
-SECRET = getenv("SECRET_KEY")
-class NotAuthenticatedException(Exception):
-    pass
-
-manager = LoginManager(SECRET, "/login", not_authenticated_exception=NotAuthenticatedException, use_cookie=True)
 
 app.include_router(db_router)
 
@@ -238,6 +236,10 @@ async def get_all_alerts():
 @app.exception_handler(NotAuthenticatedException)
 async def not_authenticated_exception_handler(request, exc):
     return RedirectResponse(f"/login/")
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return templates.TemplateResponse("error.html", {"request": request, "status_code": exc.status_code, "detail": exc.detail})
 
 if __name__ == "__main__":
     import uvicorn
