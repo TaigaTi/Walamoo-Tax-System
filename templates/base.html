@@ -9,47 +9,55 @@
     
 </head>
 <body>
-    <header class="is-flex is-justify-content-space-between is-align-items-center">
-            <span id="title" style="flex: 2">
-                <span target="{{ url_for('index') }}" class="is-flex is-align-items-center nav-link quiet-link" aria-label="Home" title="Home">
-                    <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
-                    <h1>Walamoo Tax System </h1>
-                </span>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div id="title" class="navbar-brand">
+            <span target="{{ url_for('index') }}" class="is-flex is-align-items-center nav-link quiet-link" aria-label="Home" title="Home">
+                <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
+                <h1>Walamoo Tax System </h1>
             </span>
-            <span id="nav" class="is-flex is-justify-content-space-evenly is-flex-grow-1">
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="nav" class="navbar-menu">
+            <div class="navbar-end">
                 {% block nav %}
-                    <span target="{{ url_for('dashboard') }}" class="nav-link" aria-label="Dashboard" title="Dashboard">Dashboard</span>
-                    <span target="{{ url_for('query') }}" class="nav-link" aria-label="Query" title="Query">Query</span>
-                    <span target="{{ url_for('xml') }}" class="nav-link" aria-label="XML Reload" title="XML Reload">XML</span>
+                    <span target="{{ url_for('dashboard') }}" class="nav-link navbar-item" aria-label="Dashboard" title="Dashboard">Dashboard</span>
+                    <span target="{{ url_for('query') }}" class="nav-link navbar-item" aria-label="Query" title="Query">Query</span>
+                    <span target="{{ url_for('xml') }}" class="nav-link navbar-item" aria-label="XML Reload" title="XML Reload">XML</span>
                     {% if user %}
                         {% if user['is_admin'] %}
-                            <span target="{{ url_for('logs') }}" class="nav-link" aria-label="Admin Logs" title="Admin Logs">Logs</span>
-                            <span target="{{ url_for('secret_index') }}" class="nav-link" aria-label="Admin" title="Admin">Admin</span>
+                            <span target="{{ url_for('logs') }}" class="nav-link navbar-item" aria-label="Admin Logs" title="Admin Logs">Logs</span>
+                            <span target="{{ url_for('secret_index') }}" class="nav-link navbar-item" aria-label="Admin" title="Admin">Admin</span>
                         {% endif %}
                     {% endif %}
-                    <span class="icon is-flex is-flex-direction-column is-justify-content-flex-start quiet-link" onclick="toggleMenu()">
+                    <span class="icon quiet-link" onclick="toggleMenu()">
                         <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px" class="has-background-grey-light" style="border-radius: 50%;">
-                        <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
-                            <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
-                            <hr>
-                            <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
-                            <hr>
-                            <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
-                            <hr>
-                            <span target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</span>
-                            <hr>
-                            <span target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
-                            <hr>
-                        </div>
                     </span>
                     <span>
                         {% if user %}
                             {{ user['name'] }} | {% if user['is_admin'] %} Admin {% else %} User {% endif %}
                         {% endif %}
-                </span>
+                    </span>
                 {% endblock %}
-            </span>
-    </header>
+            </div>
+        </div>
+    </nav>
+    <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
+        <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
+        <hr>
+        <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
+        <hr>
+        <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
+        <hr>
+        <span target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</span>
+        <hr>
+        <span target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
+        <hr>
+    </div>
     <section>
         <div class="container">{% block content %}{% endblock %}</div>
     </section>
@@ -80,6 +88,27 @@
         }
         alert("Could not log out")
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        
+        // Add a click event on each of them
+        $navbarBurgers.forEach( el => {
+            el.addEventListener('click', () => {
+        
+            // Get the target from the "data-target" attribute
+            const target = el.dataset.target;
+            const $target = document.getElementById(target);
+        
+            // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+            el.classList.toggle('is-active');
+            $target.classList.toggle('is-active');
+        
+            });
+        });
+        
+    });
 </script>
 <script src="{{ url_for('static', path='scripts/index.js') }}"></script>
 
