@@ -45,6 +45,10 @@ async def scenarioInformation(request: Request):
 async def report(request: Request):
     return templates.TemplateResponse("scenarioReport.html", {"request": request})
 
+@app.get("/recon/")
+async def recon(request: Request):
+    return templates.TemplateResponse("recon.html", {"request": request})
+
 @app.get("/query/")
 async def query(request: Request):
     return templates.TemplateResponse("query.html", {"request": request})
