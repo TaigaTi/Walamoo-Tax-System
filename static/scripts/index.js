@@ -26,7 +26,7 @@ const updateBodyTextColor = () => {
                 elem.classList.remove(colorClasses[key])
             }
         }
-        if (textColor === "default") return
+        // if (textColor === "default") return
         elem.classList.add(colorClasses[textColor])
     })
 }
