@@ -21,8 +21,14 @@
                     <span target="{{ url_for('dashboard') }}" class="nav-link" aria-label="Dashboard" title="Dashboard">Dashboard</span>
                     <span target="{{ url_for('query') }}" class="nav-link" aria-label="Query" title="Query">Query</span>
                     <span target="{{ url_for('xml') }}" class="nav-link" aria-label="XML Reload" title="XML Reload">XML</span>
-                    <span class="icon has-background-grey-light" style="border-radius: 50%;">
-                        <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px">
+                    <span class="icon is-flex is-flex-direction-column is-justify-content-flex-start quiet-link" onclick="toggleMenu()">
+                        <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px" class="has-background-grey-light" style="border-radius: 50%;">
+                        <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none">
+                            <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
+                            <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
+                            <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
+                            <span target="{{ url_for('logout') }}" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
+                        </div>
                     </span>
                 {% endblock %}
             </span>
@@ -41,6 +47,11 @@
             navigate(link.getAttribute("target"))
         })
     })
+
+    const toggleMenu = () => {
+        const menu = document.getElementById("menu")
+        menu.style.display = menu.style.display === "none" ? "block" : "none"
+    }
 </script>
 
 <script src="{{ url_for('static', path='scripts/index.js') }}"></script>

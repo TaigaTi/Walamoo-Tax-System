@@ -62,6 +62,10 @@ async def login(data: OAuth2PasswordRequestForm = Depends()):
     access_token = manager.create_access_token(data={"sub": user_id})
     return {"access_token": access_token, "token_type": "bearer"}
 
+@app.get("/logout/")
+async def logout(request: Request):
+    return RedirectResponse("/login/")
+
 @app.get("/preferences/")
 async def preferences(request: Request):
     return templates.TemplateResponse("userPreferences.html", {"request": request})
@@ -141,7 +145,6 @@ async def get_all_taxpayers():
 async def clear_taxpayers():
     await taxpayer_collection.delete_many({})
     return {"success": "Taxpayers were successfully cleared"}
-
 
 @app.get("/api/v1/taxpayers/query/", response_model=List[TaxPayer])
 async def query_taxpayers(company: str | None = None, country: str | None = None, tax: str | None = None):
