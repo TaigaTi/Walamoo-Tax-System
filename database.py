@@ -22,6 +22,7 @@ database = client["mydatabase"]
 user_collection = database["users"]
 taxpayer_collection = database["taxpayers"]
 alert_collection = database['alerts']
+log_collection = database['logs']
 
 async def get_users():
     users = []
@@ -79,4 +80,4 @@ async def get_taxpayers_html(request: Request):
 
     return db_templates.TemplateResponse("viewTaxpayers.html", {"request": request, "taxpayers": taxpayers})
 
-__all__ = ["db_router", "user_collection", "taxpayer_collection", "alert_collection"]
+__all__ = ["db_router", "user_collection", "taxpayer_collection", "alert_collection", "log_collection"]

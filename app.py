@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from os import getenv
 
@@ -61,10 +61,16 @@ async def login(response: Response, data: OAuth2PasswordRequestForm = Depends())
     
     access_token = manager.create_access_token(data={"sub": user_id}, expires=timedelta(days=1))
     manager.set_cookie(response, access_token)
+
+    log = Logs(user_id=user_id, name=user["name"], activity="Login", time=str(datetime.now()), admin=user['is_admin'])
+    log_collection.insert_one(log.model_dump(mode="json"))
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/logout/")
 async def logout(request: Request, response: Response, user: User = Depends(manager)):
+    log = Logs(user_id=user["user_id"], name=user["name"], activity="Logout", time=str(datetime.now()), admin=user["is_admin"])
+    log_collection.insert_one(log.model_dump(mode="json"))
+
     manager.set_cookie(response, "deleted")
     return {"access_token": "", "token_type": "bearer"}
 
