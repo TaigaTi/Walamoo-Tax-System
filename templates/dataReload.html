@@ -4,17 +4,17 @@
 
 {% block content %}
     <h1 class="title">XML Reload</h1>
-    <div id="reloadContainer"  class="container is-fullwidth is-flex is-flex-direction-column is-justify-content-space-evenly is-align-items-center has-background-grey-lighter p-3" style="min-height: 30vh; max-height: 40vh; height: 35vh; color: black;"></div>
+    <div id="reloadContainer"  class="container is-fullwidth is-flex is-flex-direction-column is-justify-content-space-evenly is-align-items-center has-background-dark p-3" style="min-height: 30vh; max-height: 40vh; height: 35vh;"></div>
 
     <script>
 
         const successContent = `
-            <h1 class='subtitle' style='color:black;'>System Data Reloaded!</h1>
+            <h1 class='subtitle'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
             <button class="button is-success" onclick="goToDashboard()"> Back to Dashboard </button>`
     
         const errorContent = `
-            <h1 class='subtitle' style='color:black;'>Upload Failed!</h1>
+            <h1 class='subtitle'>Upload Failed!</h1>
             <img src="{{ url_for('static', path='images/error.png') }}" alt="Upload Failed!" width="150px" height="150px">
             { message goes here}
             <button class="button is-danger" onclick="changeContent('default')"> Reload System XML Data </button>`
