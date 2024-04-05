@@ -1,0 +1,30 @@
+<p>Total Records Stored: {{ totalRecords }}</p>
+<table class="table is-fullwidth">
+    <thead>
+        <tr>
+            <th>Company Name</th>
+            <th>Company ID</th>
+            <th>Street</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Taxes Paid</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if taxpayers %}
+            {% for taxpayer in taxpayers %}
+                <tr>
+                    <td>{{ taxpayer.company }}</td>
+                    <td>{{ taxpayer.payer_id }}</td>
+                    <td>{{ taxpayer.street }}</td>
+                    <td>{{ taxpayer.city }}</td>
+                    <td>{{ taxpayer.country }}</td>
+                    <td>${{ taxpayer.tax }}</td>
+                </tr>
+            {% endfor %}
+            
+        {% else %}
+            <p class="subtitle">No Taxpayers found</p>
+        {% endif %}
+    </tbody>
+</table>

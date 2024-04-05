@@ -138,6 +138,16 @@ async def report(request: Request):
 async def recon(request: Request):
     return templates.TemplateResponse("recon.html", {"request": request})
 
+@app.get("/recon/view_local_statement")
+async def view_local_statement(request: Request):
+    taxpayers = []
+
+    async for taxpayer in taxpayer_collection.find():
+        tp = TaxPayer(**taxpayer)
+        taxpayers.append(tp)
+
+    return templates.TemplateResponse("subpages/queryReport.html", {"request": request, "taxpayers": taxpayers, "totalRecords": len(taxpayers)})
+
 @app.get("/query/")
 async def query(request: Request):
     return templates.TemplateResponse("query.html", {"request": request})
