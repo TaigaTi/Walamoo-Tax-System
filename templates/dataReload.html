@@ -11,7 +11,7 @@
         const successContent = `
             <h1 class='subtitle' style='color:black;'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
-            <button class="button is-success" onclick="() => {console.log('Hello'); window.location.href = '{{ url_for('dashboard') }}'}"> Back to Dashboard </button>`
+            <button class="button is-success" onclick="goToDashboard()"> Back to Dashboard </button>`
     
         const errorContent = `
             <h1 class='subtitle' style='color:black;'>Upload Failed!</h1>
@@ -28,6 +28,10 @@
             "success": successContent,
             "error": errorContent,
             "default": defaultContent
+        }
+
+        const goToDashboard = () => {
+            window.location.href = "{{ url_for('dashboard') }}"
         }
     
         const changeContent = (contentKey, message=undefined) => {
@@ -116,27 +120,28 @@
                         return;
                     }
 
-                    fetch("{{ url_for('clear_taxpayers') }}")
+                    fetch("{{ url_for('clear_taxpayers') }}").then( () => {
+                        const addTaxpayerPromises = [];
+    
+                        for (let obj of addTaxpayerObjects) {
+                            addTaxpayerPromises.push(
+                                fetch("{{ url_for('add_taxpayer') }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify(obj)
+                                })
+                            );
+                        }
+    
+    
+                        Promise.all(addTaxpayerPromises).then(responses => {
+                            valid = responses.every(response => response.ok);
+                            changeContent( valid ? "success" : "error", error_message);
+                        });
+                    })
 
-                    const addTaxpayerPromises = [];
-
-                    for (let obj of addTaxpayerObjects) {
-                        addTaxpayerPromises.push(
-                            fetch("{{ url_for('add_taxpayer') }}", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify(obj)
-                            })
-                        );
-                    }
-
-
-                    Promise.all(addTaxpayerPromises).then(responses => {
-                        valid = responses.every(response => response.ok);
-                        changeContent( valid ? "success" : "error", error_message);
-                    });
 
                 }
             }
