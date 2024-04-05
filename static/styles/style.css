@@ -16,3 +16,39 @@
     padding: 0.7em;
     margin: 0.3em;
 }
+
+
+.visible{
+    animation: slideFade 0.5s ease-in-out forwards;
+    opacity: 0;
+}
+
+.hidden{
+    opacity: 1;
+    animation: slideFadeReverse 0.5s ease-in-out forwards;
+}
+
+@keyframes slideFade {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        display: block;
+    }
+}
+
+@keyframes slideFadeReverse {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100%);
+        display: none;
+    }
+}
+

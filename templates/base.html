@@ -46,7 +46,7 @@
             </div>
         </div>
     </nav>
-    <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
+    <div id="menu" class="has-background-info-dark p-2 hidden" style="border-radius: 5px; display: none; z-index: 999">
         <div target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</div>
         <div target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</div>
         <div target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</div>
@@ -70,7 +70,16 @@
     
     const toggleMenu = () => {
         const menu = document.getElementById("menu")
-        menu.style.display = menu.style.display === "none" ? "block" : "none"
+        if (menu.style.display === "none") {
+            menu.style.display = "block"
+        }
+        else {
+            setTimeout(() => {
+                menu.style.display = "none"
+            }, 1000)
+        }
+        menu.classList.toggle("hidden")
+        menu.classList.toggle("visible")
     }
     
     const logout = async (e) => {
