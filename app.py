@@ -3,6 +3,8 @@ from os import getenv
 
 load_dotenv()
 
+from typing import List
+
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -128,7 +130,7 @@ async def add_taxpayer(taxpayer: TaxPayer):
     except Exception as e:
         raise HTTPException(status_code=400, detail="Could not create taxpayer")
     
-@app.get("/api/v1/taxpayers/")
+@app.get("/api/v1/taxpayers/", response_model=List[TaxPayer])
 async def get_all_taxpayers():
     all_taxpayers = []
     async for taxpayer in taxpayer_collection.find():
@@ -142,4 +144,4 @@ async def not_authenticated_exception_handler(request, exc):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="0.0.0.0", port=8000)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
