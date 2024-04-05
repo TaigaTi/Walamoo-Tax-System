@@ -78,6 +78,21 @@ async def xml(request: Request):
 async def logs(request: Request):
     return templates.TemplateResponse("logs.html", {"request": request})
 
+@app.post("/api/v1/taxpayers/add/")
+async def add_taxpayer(taxpayer: TaxPayer):
+    try:
+        _ = await taxpayer_collection.insert_one(taxpayer.model_dump(mode="json"))
+        return {"success": "Taxpayer was successfully created"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Could not create taxpayer")
+    
+@app.get("/api/v1/taxpayers/")
+async def get_all_taxpayers():
+    all_taxpayers = []
+    async for taxpayer in taxpayer_collection.find():
+        all_taxpayers.append(taxpayer)
+    return all_taxpayers
+
 # @app.get("/users/{user_id}", response_model=User)
 # async def get_user(user_id: int):
 #     user = await user_collection.find_one({"id": user_id})

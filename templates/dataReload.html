@@ -7,6 +7,7 @@
     <div id="reloadContainer"  class="container is-fullwidth is-flex is-flex-direction-column is-justify-content-space-evenly is-align-items-center has-background-grey-lighter p-3" style="min-height: 30vh; max-height: 40vh; height: 35vh; color: black;"></div>
 
     <script>
+
         const successContent = `
             <h1 class='title'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
@@ -15,13 +16,14 @@
         const errorContent = `
             <h1 class='title'>Upload Failed!</h1>
             <img src="{{ url_for('static', path='images/error.png') }}" alt="Upload Failed!" width="150px" height="150px">
-            <p> File was not uploaded.</p>
+            <p> File was not uploaded or contained invalid data.</p>
             <p> Check your connection and try again. </p>
             <button class="button is-danger" onclick="changeContent('default')"> Reload System XML Data </button>`
     
         const defaultContent = `
             <img src="{{ url_for('static', path='images/upload.png') }}" alt="Upload..." width="150px" height="150px">
-            <button class='button is-primary' onclick="changeContent('success')">Upload New XML File</button>`
+            <label for='file' class='button is-success'>Upload New XML File</label>
+            <input type='file' id='file' name='file' accept='.xml'/ required style='opacity: 0;' onchange="parseXML(this)">`
     
         const contentKeys = {
             "success": successContent,
@@ -31,6 +33,76 @@
     
         const changeContent = (contentKey) => {
             document.getElementById("reloadContainer").innerHTML = contentKeys[contentKey]
+        }
+
+        const parseXML = (xml) => {
+            const curFiles = xml.files;
+
+            if (curFiles.length == 0) {
+                changeContent("error");
+                return;
+            }
+
+            const file = curFiles[0];
+            let reader = new FileReader();
+            reader.readAsText(file);
+            
+            reader.onloadend = () => {
+                let xmlData = reader.result;
+                
+                xmlData = xmlData.replace(/“|”/g, '"');
+
+                if (window.DOMParser){
+                    const parser = new DOMParser();
+                    xmlDoc = parser.parseFromString(xmlData, "application/xml");
+                    taxpayers = xmlDoc.getElementsByTagName("taxpayer");
+
+                    if (taxpayers.length == 0) {
+                        changeContent("error");
+                        return;
+                    }
+                    
+                    let valid = true;
+
+                    for (let taxpayer of taxpayers){
+                        if (!valid) {
+                            changeContent("error");
+                            return
+                        }
+                        let taxpayer_id = taxpayer.getAttribute("id");
+                        let company = taxpayer.getElementsByTagName("company")[0].childNodes[0].nodeValue;
+                        let street = taxpayer.getElementsByTagName("street")[0].childNodes[0].nodeValue;
+                        let city = taxpayer.getElementsByTagName("city")[0].childNodes[0].nodeValue;
+                        let country = taxpayer.getElementsByTagName("country")[0].childNodes[0].nodeValue;
+                        let tax = taxpayer.getElementsByTagName("tax")[0].childNodes[0].nodeValue;
+    
+                        fetch("{{ url_for('add_taxpayer') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                "payer_id": taxpayer_id,
+                                "company": company,
+                                "street": street,
+                                "city": city,
+                                "country": country,
+                                "tax": tax
+                            })
+                        }).then((response) => {
+                            if (!response.ok) {
+                                valid = false
+                                changeContent("error");
+                            }
+                        })
+                    }
+
+                    if (valid) {
+                        changeContent("success");
+                    }
+
+                }
+            }
         }
     
         changeContent("default")
