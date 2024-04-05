@@ -137,6 +137,11 @@ async def get_all_taxpayers():
         all_taxpayers.append(taxpayer)
     return all_taxpayers
 
+@app.get("/api/v1/taxpayers/clear/")
+async def clear_taxpayers():
+    await taxpayer_collection.delete_many({})
+    return {"success": "Taxpayers were successfully cleared"}
+
 # Exceptions
 @app.exception_handler(NotAuthenticatedException)
 async def not_authenticated_exception_handler(request, exc):
