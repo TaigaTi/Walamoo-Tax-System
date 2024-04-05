@@ -1,26 +1,26 @@
 <div class="recordContainers fixed-grid">
     <div class="grid">
         <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
-            <div class="recordTitle">
+            <div class="recordTitle subtitle">
                 Records In Database
             </div>
             <div class="recordValue" id="recordsCount"> { recordsCount } </div>
         </div>
         <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
-            <div class="recordTitle">
-                Records In Database
+            <div class="recordTitle subtitle">
+                Tax Paid This Year
             </div>
             <div class="recordValue" id="yearlyTaxPay"> { yearlyTaxPay } </div>
         </div>
         <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
-            <div class="recordTitle">
-                Records In Database
+            <div class="recordTitle subtitle">
+                Tax Paying Countries
             </div>
             <div class="recordValue" id="taxPayingCountries"> { taxPayingCountries } </div>
         </div>
         <div class="recordContainer cell container has-background-dark p-5 has-text-centered" style="border-radius: 5px">
-            <div class="recordTitle">
-                Records In Database
+            <div class="recordTitle subtitle">
+                Tax Paying Cities
             </div>
             <div class="recordValue" id="taxPayingCities">{ taxPayingCities }</div>
         </div>
@@ -29,3 +29,45 @@
 <div class="buttonContainer is-flex is-justify-content-flex-end">
     <button class="button is-success" hx-get="{{ url_for('citiesDashboard') }}" hx-target="#dashboardContent" hx-swap="innerHTML">View Cities Per Country</button>
 </div>
+
+<script>
+    async function getAllTaxPayers() {
+        let response = await fetch("{{ url_for('get_all_taxpayers') }}");
+        if (!response.ok) {
+            alert("An error occurred while fetching tax payers");
+            return
+        }
+
+        let taxpayers = await response.json();
+        if (taxpayers.length == 0) {
+            document.getElementById("recordsCount").innerHTML = "0";
+            document.getElementById("yearlyTaxPay").innerHTML = "----";
+            document.getElementById("taxPayingCountries").innerHTML = "----";
+            document.getElementById("taxPayingCities").innerHTML = "----";
+            return;
+        }
+
+        console.log(taxpayers);
+
+        const recordsCount = taxpayers.length;
+        
+        const totalTax = taxpayers.reduce((acc, cur) => {
+            acc.tax += cur.tax;
+            return acc;
+        }, {tax: 0});
+
+        const uniqueCountries = new Set();
+        const uniqueCities = new Set();
+        for (let taxpayer of taxpayers) {
+            uniqueCountries.add(taxpayer.country);
+            uniqueCities.add(taxpayer.city);
+        }
+        
+        document.getElementById("recordsCount").innerHTML = recordsCount;
+        document.getElementById("yearlyTaxPay").innerHTML = `$${totalTax.tax.toLocaleString()}`;
+        document.getElementById("taxPayingCountries").innerHTML = uniqueCountries.size
+        document.getElementById("taxPayingCities").innerHTML = uniqueCities.size
+
+    }
+    getAllTaxPayers();
+</script>
