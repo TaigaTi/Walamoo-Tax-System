@@ -12,7 +12,7 @@ const setToken = (newToken) => {
 }
 
 const colorClasses = {
-    "default": "has-text-dark",
+    "default": "has-text-light",
     "black": "has-text-black",
     "blue": "has-text-link",
     "green": "has-text-success"
@@ -26,9 +26,9 @@ const updateBodyTextColor = () => {
                 elem.classList.remove(colorClasses[key])
             }
         }
+        if (textColor === "default") return
         elem.classList.add(colorClasses[textColor])
     })
-    document.body.className = colorClasses[textColor]
 }
 
 const changeTextColor = (element) => {
