@@ -1,0 +1,33 @@
+<form action="{{ url_for('create_taxpayer') }}" method="POST">
+    <div class="container is-fullwidth fixed-grid">
+        <div class="grid">
+            <div class="field cell">
+                <label for="payer_id" class="label">Payer ID</label>
+                <input type="text" name="payer_id" id="payer_id" class="input">
+            </div>
+            <div class="field cell">
+                <label for="company" class="label">Company</label>
+                <input type="text" name="company" id="company" class="input">
+            </div>
+            <div class="field cell">
+                <label for="street" class="label">Street</label>
+                <input type="text" name="street" id="street" class="input">
+            </div>
+            <div class="field cell">
+                <label for="city" class="label">City</label>
+                <input type="text" name="city" id="city" class="input">
+            </div>
+            <div class="field cell">
+                <label for="country" class="label">Country</label>
+                <input type="text" name="country" id="country" class="input">
+            </div>
+            <div class="field cell">
+                <label for="tax" class="label">Tax ($$)</label>
+                <input type="number" name="tax" id="tax" class="input">
+            </div>
+        </div>
+    </div>
+    <div class="buttonContainer is-flex is-justify-content-flex-end">
+        <input type="submit" value="Add Taxpayer" class="button is-primary">
+    </div>
+</form>

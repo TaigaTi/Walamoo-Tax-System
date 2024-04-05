@@ -30,7 +30,7 @@
                 </div> 
                 <div class="field">
                     <div class="control is-flex is-justify-content-center">
-                        <input type="button" value="Select" class="button is-success">
+                        <input type="button" value="Select" class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)">
                     </div>
                 </div>  
                 <div class="field">
@@ -45,4 +45,19 @@
         </div>
     </div>
 
+    <script>
+        const textColorSelect = document.getElementById('textColorSelect');
+        const languageSelect = document.getElementById('languageSelect');
+
+        textColorSelect.addEventListener('change', () => {
+            const textColor = textColorSelect.value;
+            localStorage.setItem('textColor', textColor);
+        })
+
+        languageSelect.addEventListener('change', () => {
+            const language = languageSelect.value;
+            localStorage.setItem('language', language);
+        })
+
+    </script>
 {% endblock %}

@@ -4,24 +4,25 @@
 
 {% block content %}
     <h1 class="title">XML Reload</h1>
-    <div id="reloadContainer"  class="container is-fullwidth is-flex is-flex-direction-column is-justify-content-space-evenly is-align-items-center has-background-grey-lighter p-3" style="min-height: 30vh; max-height: 40vh; height: 35vh; color: black;"></div>
+    <div id="reloadContainer"  class="container is-fullwidth is-flex is-flex-direction-column is-justify-content-space-evenly is-align-items-center has-background-dark p-3" style="min-height: 30vh; max-height: 40vh; height: 35vh;"></div>
 
     <script>
+
         const successContent = `
-            <h1 class='title'>System Data Reloaded!</h1>
+            <h1 class='subtitle'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
-            <button class="button is-success" onclick="changeContent('default')"> Back to Dashboard </button>`
+            <button class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)"> Back to Dashboard </button>`
     
         const errorContent = `
-            <h1 class='title'>Upload Failed!</h1>
+            <h1 class='subtitle'>Upload Failed!</h1>
             <img src="{{ url_for('static', path='images/error.png') }}" alt="Upload Failed!" width="150px" height="150px">
-            <p> File was not uploaded.</p>
-            <p> Check your connection and try again. </p>
+            { message goes here}
             <button class="button is-danger" onclick="changeContent('default')"> Reload System XML Data </button>`
     
         const defaultContent = `
             <img src="{{ url_for('static', path='images/upload.png') }}" alt="Upload..." width="150px" height="150px">
-            <button class='button is-primary' onclick="changeContent('success')">Upload New XML File</button>`
+            <label for='file' class='button is-success' id="fileLabel">Upload New XML File</label>
+            <input type='file' id='file' name='file' accept='.xml'/ required style='opacity: 0;' onchange="parseXML(this)">`
     
         const contentKeys = {
             "success": successContent,
@@ -29,8 +30,117 @@
             "default": defaultContent
         }
     
-        const changeContent = (contentKey) => {
-            document.getElementById("reloadContainer").innerHTML = contentKeys[contentKey]
+        const changeContent = (contentKey, message=undefined) => {
+
+            if (contentKey === "error" && message) {
+                let errorMessage = message.toString();
+                console.log(errorMessage);
+                document.getElementById("reloadContainer").innerHTML = errorContent.replace("{ message goes here}", `Error: ${errorMessage}`);
+            } else {
+                document.getElementById("reloadContainer").innerHTML = contentKeys[contentKey]
+            }
+        }
+
+        const parseXML = (xml) => {
+            const curFiles = xml.files;
+
+            document.getElementById("file").disabled = true;
+            document.getElementById("fileLabel").classList.add("is-loading")
+
+            let error_message = undefined
+
+            if (curFiles.length == 0) {
+                changeContent("error");
+                return;
+            }
+
+            const file = curFiles[0];
+            let reader = new FileReader();
+            reader.readAsText(file);
+            
+            reader.onerror = () => {
+                changeContent("error", "Error reading file: " + reader.error);
+                return
+            }
+            reader.onloadend = () => {
+                let xmlData = reader.result;
+                
+                xmlData = xmlData.replace(/“|”/g, '"');
+
+                if (window.DOMParser){
+                    const parser = new DOMParser();
+                    xmlDoc = parser.parseFromString(xmlData, "application/xml");
+                    taxpayers = xmlDoc.getElementsByTagName("taxpayer");
+
+                    if (taxpayers.length == 0) {
+                        changeContent("error", "No taxpayers found");
+                        return;
+                    }
+                    
+                    let valid = true;
+
+                    const addTaxpayerObjects = [];
+                    for (let taxpayer of taxpayers) {
+                        const taxpayerAttrs = ["id", "company", "street", "city", "country", "tax"];
+                        for (const attr of taxpayerAttrs) {
+                            if (attr === "id") {
+                                if (!taxpayer.getAttribute(attr)){
+                                    error_message = "Failed to get ID from a taxpayer";
+                                    valid = false; 
+                                    break
+                                }
+                            }
+                            else if (!taxpayer.getElementsByTagName(attr)[0] || !taxpayer.getElementsByTagName(attr)[0].childNodes[0].nodeValue) {
+                                error_message = "Failed to get " + attr + " from taxpayer " + taxpayer.getAttribute("id");
+                                valid = false;
+                                break;
+                            }
+                        }
+                        
+                        if (!valid) {
+                            break;
+                        }
+
+                        addTaxpayerObjects.push({
+                            "payer_id": taxpayer.getAttribute("id"),
+                            "company": taxpayer.getElementsByTagName("company")[0].childNodes[0].nodeValue,
+                            "street": taxpayer.getElementsByTagName("street")[0].childNodes[0].nodeValue,
+                            "city": taxpayer.getElementsByTagName("city")[0].childNodes[0].nodeValue,
+                            "country": taxpayer.getElementsByTagName("country")[0].childNodes[0].nodeValue,
+                            "tax": taxpayer.getElementsByTagName("tax")[0].childNodes[0].nodeValue
+                        })
+                    }
+                    
+                    if (!valid) {
+                        changeContent("error", error_message);
+                        return;
+                    }
+
+                    fetch("{{ url_for('clear_taxpayers') }}").then( () => {
+                        const addTaxpayerPromises = [];
+    
+                        for (let obj of addTaxpayerObjects) {
+                            addTaxpayerPromises.push(
+                                fetch("{{ url_for('add_taxpayer') }}", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json"
+                                    },
+                                    body: JSON.stringify(obj)
+                                })
+                            );
+                        }
+    
+    
+                        Promise.all(addTaxpayerPromises).then(responses => {
+                            valid = responses.every(response => response.ok);
+                            changeContent( valid ? "success" : "error", error_message);
+                        });
+                    })
+
+
+                }
+            }
         }
     
         changeContent("default")

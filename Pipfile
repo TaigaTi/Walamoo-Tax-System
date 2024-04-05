@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 fastapi = {extras = ["all"], version = "*"}
 uvicorn = "*"
+motor = "*"
+pydantic = "*"
+python-multipart = "*"
+fastapi-login = "*"
 
 [dev-packages]
 

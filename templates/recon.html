@@ -7,37 +7,35 @@
 <section class="section">
     <div class="container">
         <h1 class="title">Reconciliation</h1>
-        <form>
-            <div class="field is-flex is-align-items-center">
-                <label class="label p-2" for="monthSelect">Month:</label>
-                <div class="control">
-                    <div class="select">
-                        <select id="monthSelect" name="monthSelect">
-                            <option value="jan">January</option>
-                            <option value="feb">February</option>
-                            <option value="mar">March</option>
-                            <option value="apr">April</option>
-                            <option value="may">May</option>
-                            <option value="jun">June</option>
-                            <option value="jul">July</option>
-                            <option value="aug">August</option>
-                            <option value="sep">September</option>
-                            <option value="oct">October</option>
-                            <option value="nov">November</option>
-                            <option value="dec">December</option>
-                        </select>
-                    </div>
+        <div class="field is-flex is-align-items-center">
+            <label class="label p-2" for="monthSelect">Month:</label>
+            <div class="control">
+                <div class="select">
+                    <select id="monthSelect" name="monthSelect">
+                        <option value="jan">January</option>
+                        <option value="feb">February</option>
+                        <option value="mar">March</option>
+                        <option value="apr">April</option>
+                        <option value="may">May</option>
+                        <option value="jun">June</option>
+                        <option value="jul">July</option>
+                        <option value="aug">August</option>
+                        <option value="sep">September</option>
+                        <option value="oct">October</option>
+                        <option value="nov">November</option>
+                        <option value="dec">December</option>
+                    </select>
                 </div>
             </div>
-            <div id="scenariosContent" class="container" style="height: 50vh;">
-                <p>Please select a month</p>
-            </div>
-            <div class="container is-fullwidth is-flex is-justify-content-space-around">
-                <button class="button is-success">View Bank Statement</button>
-                <button class="button is-success">View Local Statement</button>
-                <button class="button is-success">Calculate Reconciliation</button>
-            </div>
-        </form>
+        </div>
+        <div class="container is-fullwidth is-flex is-justify-content-space-around">
+            <button class="button is-success is-dark" onclick="alert('No Bank statement has been provided as yet')">View Bank Statement</button>
+            <button class="button is-success" hx-get="{{ url_for('view_local_statement') }}" hx-target="#scenariosContent" hx-swap="innerHTML">View Local Statement</button>
+            <button class="button is-success is-dark" onclick="alert('Cannot calculate without bank statement')">Calculate Reconciliation</button>
+        </div>
+        <div id="scenariosContent" class="container" style="height: 50vh;">
+            <p>Please select a month</p>
+        </div>
     </div>
 </section>
 

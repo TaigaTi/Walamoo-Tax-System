@@ -1,0 +1,27 @@
+{% if taxpayers %}
+    <table class="table is-fullwidth">
+        <thead>
+            <th>Payer ID</th>
+            <th>Company</th>
+            <th>Street</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Tax ($$)</th>
+        </thead>
+        <tbody>
+            {% for taxpayer in taxpayers %}
+                <tr>
+                    <td>{{ taxpayer.payer_id }}</td>
+                    <td>{{ taxpayer.company }}</td>
+                    <td>{{ taxpayer.street }}</td>
+                    <td>{{ taxpayer.city }}</td>
+                    <td>{{ taxpayer.country }}</td>
+                    <td>{{ taxpayer.tax }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% else %}
+    <p class="subtitle">No Taxpayers found</p>
+{% endif %}

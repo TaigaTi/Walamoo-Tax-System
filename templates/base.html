@@ -10,18 +10,41 @@
 </head>
 <body>
     <header class="is-flex is-justify-content-space-between is-align-items-center">
-            <span id="title" class="is-flex is-align-items-center" style="flex: 2">
-                <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
-                <h1>Walamoo Tax System </h1>
+            <span id="title" style="flex: 2">
+                <span target="{{ url_for('index') }}" class="is-flex is-align-items-center nav-link quiet-link" aria-label="Home" title="Home">
+                    <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
+                    <h1>Walamoo Tax System </h1>
+                </span>
             </span>
             <span id="nav" class="is-flex is-justify-content-space-evenly is-flex-grow-1">
                 {% block nav %}
-                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
-                    <a href="{{ url_for('query') }}">Query</a>
-                    <a href="{{ url_for('xml') }}">XML</a>
-                    <span class="icon">
-                        <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px">
+                    <span target="{{ url_for('dashboard') }}" class="nav-link" aria-label="Dashboard" title="Dashboard">Dashboard</span>
+                    <span target="{{ url_for('query') }}" class="nav-link" aria-label="Query" title="Query">Query</span>
+                    <span target="{{ url_for('xml') }}" class="nav-link" aria-label="XML Reload" title="XML Reload">XML</span>
+                    {% if user %}
+                        {% if user['is_admin'] %}
+                            <span target="{{ url_for('logs') }}" class="nav-link" aria-label="Admin Logs" title="Admin Logs">Logs</span>
+                            <span target="{{ url_for('secret_index') }}" class="nav-link" aria-label="Admin" title="Admin">Admin</span>
+                        {% endif %}
+                    {% endif %}
+                    <span class="icon is-flex is-flex-direction-column is-justify-content-flex-start quiet-link" onclick="toggleMenu()">
+                        <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px" class="has-background-grey-light" style="border-radius: 50%;">
+                        <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
+                            <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
+                            <hr>
+                            <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
+                            <hr>
+                            <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
+                            <hr>
+                            <span target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
+                            <hr>
+                        </div>
                     </span>
+                    <span>
+                        {% if user %}
+                            {{ user['name'] }} | {% if user['is_admin'] %} Admin {% else %} User {% endif %}
+                        {% endif %}
+                </span>
                 {% endblock %}
             </span>
     </header>
@@ -30,6 +53,33 @@
     </section>
 
 </body>
-<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
+
+<script>
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    navLinks.forEach(link => {
+        link.addEventListener("click", () => {
+            navigate(link.getAttribute("target"))
+        })
+    })
+
+    const toggleMenu = () => {
+        const menu = document.getElementById("menu")
+        menu.style.display = menu.style.display === "none" ? "block" : "none"
+    }
+
+    const logout = async (e) => {
+        const response = await fetch("{{ url_for('logout') }}")
+        if (response.ok){
+            const data = await response.json()
+            document.cookie = "access-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+            navToTarget(e)
+            return
+        }
+        alert("Could not log out")
+    }
+</script>
+
 <script src="{{ url_for('static', path='scripts/index.js') }}"></script>
+<script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
 </html>

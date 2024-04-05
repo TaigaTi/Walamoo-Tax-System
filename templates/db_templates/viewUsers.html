@@ -1,0 +1,23 @@
+{% if users %}
+    <table class="table is-fullwidth">
+        <thead>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Admin</th>
+            <th>Password</th>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.user_id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.is_admin }}</td>
+                    <td>{{ user.password }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% else %}
+    <p class="subtitle">No users found</p>
+{% endif %}

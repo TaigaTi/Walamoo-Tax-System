@@ -1,0 +1,16 @@
+.quiet-link{
+    cursor: pointer;
+}
+
+.nav-link{
+    cursor: pointer;
+}
+
+.nav-link:hover{
+    text-decoration: underline;
+    color: rgb(159, 159, 244);
+}
+
+#menu span{
+    border-bottom: 1px solid black;
+}

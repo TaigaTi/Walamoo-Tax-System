@@ -1,0 +1,162 @@
+<tifs>
+<taxpayer id=“2452”>
+		<company>Food Fashion Inc</company>
+		<street>Berley Street</street>
+		<city>Bridgetown</city>
+		<country>Barbados</country>
+		<tax>250000</tax>
+</taxpayer>
+
+<taxpayer id=“4251”>
+		<company>Who Wants Dairy Inc</company>
+		<street>Tank Street</street>
+		<city>Oistins</city>
+		<country>Barbados</country>
+		<tax>450500</tax>
+</taxpayer>
+
+<taxpayer id=“3425”>
+		<company>The Car Shop Ltd.</company>
+		<street>Mega Street</street>
+		<city>Kingston</city>
+		<country>Jamaica</country>
+		<tax>100500</tax>
+</taxpayer>
+
+<taxpayer id=“1264”>
+		<company>Bakes Unlimited</company>
+		<street>Wishful Street</street>
+		<city>Port Of Spain</city>
+		<country>Trinidad</country>
+		<tax>600200</tax>
+</taxpayer>
+
+<taxpayer id=“1452”>
+		<company>Tanker 5</company>
+		<street>Terrific Street</street>
+		<city>Kingstown</city>
+		<country>St. Vincent</country>
+		<tax>550000</tax>
+</taxpayer>
+
+<taxpayer id=“2563”>
+		<company>The Food House</company>
+		<street>Maley Street</street>
+		<city>St. George's</city>
+		<country>Grenada</country>
+		<tax>21000</tax>
+</taxpayer>
+
+<taxpayer id=“2854”>
+		<company>Music One Inc</company>
+		<street>One Note Street</street>
+		<city>Kingston</city>
+		<country>Jamaica</country>
+		<tax>42000</tax>
+</taxpayer>
+
+<taxpayer id=“4524”>
+		<company>Macaroni and Friends Ltd</company>
+		<street>Food Street</street>
+		<city>Basseterre</city>
+		<country>St. Kitts</country>
+		<tax>400500</tax>
+</taxpayer>
+
+<taxpayer id=“4945”>
+		<company>Furniture Warehouse</company>
+		<street>Dunk Street</street>
+		<city>Castries</city>
+		<country>St. Lucia</country>
+		<tax>62000</tax>
+</taxpayer>
+
+<taxpayer id=“5625”>
+		<company>Tires Tires Tires</company>
+		<street>First Street</street>
+		<city>Port Of Spain</city>
+		<country>Trinidad</country>
+		<tax>5000</tax>
+</taxpayer>
+
+<taxpayer id=“2452”>
+		<company>Food Fashion Inc</company>
+		<street>Berley Street</street>
+		<city>Bridgetown</city>
+		<country>Barbados</country>
+		<tax>1000</tax>
+</taxpayer>
+
+<taxpayer id=“4251”>
+		<company>Who Wants Dairy Inc</company>
+		<street>Tank Street</street>
+		<city>Oistins</city>
+		<country>Barbados</country>
+		<tax>800500</tax>
+</taxpayer>
+
+<taxpayer id=“4251”>
+		<company>Who Wants Dairy Inc</company>
+		<street>Tank Street</street>
+		<city>Oistins</city>
+		<country>Barbados</country>
+		<tax>90000</tax>
+</taxpayer>
+
+<taxpayer id=“3425”>
+		<company>The Car Shop Ltd.</company>
+		<street>Mega Street</street>
+		<city>Kingston</city>
+		<country>Jamaica</country>
+		<tax>560500</tax>
+</taxpayer>
+
+<taxpayer id=“2563”>
+		<company>The Food House</company>
+		<street>Maley Street</street>
+		<city>St. George's</city>
+		<country>Grenada</country>
+		<tax>3400</tax>
+</taxpayer>
+
+<taxpayer id=“2563”>
+		<company>The Food House</company>
+		<street>Maley Street</street>
+		<city>St. George's</city>
+		<country>Grenada</country>
+		<tax>500</tax>
+</taxpayer>
+
+<taxpayer id=“2854”>
+		<company>Music One Inc</company>
+		<street>One Note Street</street>
+		<city>Kingston</city>
+		<country>Jamaica</country>
+		<tax>2100</tax>
+</taxpayer>
+
+<taxpayer id=“4524”>
+		<company>Macaroni and Friends Ltd</company>
+		<street>Food Street</street>
+		<city>Basseterre</city>
+		<country>St. Kitts</country>
+		<tax>5400</tax>
+</taxpayer>
+
+<taxpayer id=“4945”>
+		<company>Furniture Warehouse</company>
+		<street>Dunk Street</street>
+		<city>Castries</city>
+		<country>St. Lucia</country>
+		<tax>402500</tax>
+</taxpayer>
+
+<taxpayer id=“4945”>
+		<company>Furniture Warehouse</company>
+		<street>Dunk Street</street>
+		<city>Castries</city>
+		<country>St. Lucia</country>
+		<tax>1000</tax>
+</taxpayer>
+</tifs>
+

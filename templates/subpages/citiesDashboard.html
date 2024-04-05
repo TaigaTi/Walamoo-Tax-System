@@ -1,3 +1,7 @@
+<div class="container is-fullwidth">
+    <h2 class="subtitle">Cities Per Country Table</h2>
+</div>
+<div id="notice" class="is-danger"></div>
 <table class="table is-fullwidth">
     <thead>
         <tr>
@@ -5,13 +9,50 @@
             <th>Cities per Country</th>
         </tr>
     </thead>
-    <tbody>
-        <tr>
-            <th>Country 1</th>
-            <td>100</td>
-        </tr>
+    <tbody id="countryTableBody">
     </tbody>
 </table>
 <div class="buttonContainer is-flex is-justify-content-flex-end">
     <button class="button is-success" hx-get="{{ url_for('mainDashboard') }}" hx-target="#dashboardContent" hx-swap="innerHTML">Return to dashboard</button>
 </div>
+
+<script>
+    async function getTaxpayers() {
+        const response = await fetch("{{ url_for('get_all_taxpayers') }}");
+        if (!response.ok) {
+            alert("An error occurred while fetching tax payers");
+            return;
+        }
+
+        const taxpayers = await response.json();
+        if (taxpayers.length == 0) {
+            document.getElementById("notice").innerHTML = "No taxpayers found. Be sure to upload the XML Data First";
+            return;
+        }
+
+        let countrySet = new Set(taxpayers.map(taxpayer => taxpayer.country));
+
+        let countryCountObj = {}
+
+        for (let country of countrySet) {
+            countryCountObj[country] = 0;
+        }
+
+        for (let taxpayer of taxpayers) {
+            countryCountObj[taxpayer.country] += 1;
+        }
+
+        for (let country of countrySet) {
+            let tr = document.createElement("tr");
+            let td1 = document.createElement("td");
+            let td2 = document.createElement("td");
+            td1.innerHTML = country;
+            td2.innerHTML = countryCountObj[country];
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            document.getElementById("countryTableBody").appendChild(tr);
+        }
+    }
+
+    getTaxpayers();
+</script>
