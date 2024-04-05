@@ -3,7 +3,7 @@
 
 <div class="container is-fullwidth is-flex is-flex-direction-column my-3">
     <button class="button is-primary m-1" onclick="prepareForm('company')">Company Name</button>
-    <button class="button is-primary m-1" onclick="prepareForm('tax')">Total Taxes Paid</button>
+    <button class="button is-primary m-1" onclick="showAll()">View All</button>
     <button class="button is-primary m-1" onclick="prepareForm('country')">Country</button>
 </div>
 
@@ -116,6 +116,23 @@
             </div>
         </form>`.replace(/{ queryType }/g, queryType);
         setupForm();
+    }
+
+    const showAll = async () => {
+        const taxpayers = await fetch("{{ url_for('get_all_taxpayers') }}");
+
+        if (!taxpayers.ok) {
+            alert("An error occurred while fetching tax payers");
+            return;
+        }
+
+        const data = await taxpayers.json();
+        if (data.length === 0) {
+            document.getElementById('queryResultDiv').innerHTML = '<p>No results found</p>';
+            return;
+        }
+        document.getElementById('queryResultDiv').appendChild(createTable(data));
+
     }
 
 </script>
