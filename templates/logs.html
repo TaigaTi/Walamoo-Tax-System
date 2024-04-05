@@ -6,6 +6,7 @@
 
     <div class="container is-fullwidth has-text-centered my-3">
         <h1 class="title">User Activity Login</h1>
+        <button class="button is-primary" hx-get="{{ url_for('clear_logs') }}" hx-target="#logTable" hx-swap="innerHTML">Clear Logs</button>
     </div>
 
         <table class="table is-fullwidth">

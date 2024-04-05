@@ -187,6 +187,14 @@ async def logs(request: Request, user: User = Depends(manager)):
 
     return templates.TemplateResponse("logs.html", {"request": request, "user": user, "logs": logs})
 
+@app.get("/logs/clear/")
+async def clear_logs(request: Request, user: User = Depends(manager)):
+    if not user["is_admin"]:
+        raise HTTPException(status_code=403, detail="Not authorized to access this resource")
+    
+    await log_collection.delete_many({})
+    return "<h2 class='subtitle'>Logs have been Cleared</h2>"
+
 @app.post("/api/v1/taxpayers/add/")
 async def add_taxpayer(taxpayer: TaxPayer):
     try:
