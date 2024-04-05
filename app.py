@@ -1,3 +1,4 @@
+from datetime import timedelta
 from dotenv import load_dotenv
 from os import getenv
 
@@ -59,7 +60,7 @@ async def login(data: OAuth2PasswordRequestForm = Depends()):
     if user["password"] != password:
         raise InvalidCredentialsException
     
-    access_token = manager.create_access_token(data={"sub": user_id})
+    access_token = manager.create_access_token(data={"sub": user_id}, expires=timedelta(days=1))
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/logout/")
@@ -67,27 +68,27 @@ async def logout(request: Request):
     return RedirectResponse("/login/")
 
 @app.get("/preferences/")
-async def preferences(request: Request):
+async def preferences(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("userPreferences.html", {"request": request})
 
 @app.get("/dashboard/")
-async def dashboard(request: Request):
+async def dashboard(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
 @app.get("/subpages/mainDashboard/")
-async def mainDashboard(request: Request):
+async def mainDashboard(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("subpages/mainDashboard.html", {"request": request})
 
 @app.get("/subpages/citiesDashboard/")
-async def citiesDashboard(request: Request):
+async def citiesDashboard(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("subpages/citiesDashboard.html", {"request": request})
 
 @app.get("/alerts/")
-async def alerts(request: Request):
+async def alerts(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("alerts.html", {"request": request})
 
 @app.post("/alerts/")
-async def alerts(alert : Alert):
+async def alerts(alert : Alert, user: User = Depends(manager)):
     await alert_collection.delete_many({})
     try:
         _ = await alert_collection.insert_one(alert.model_dump(mode="json"))
@@ -96,11 +97,11 @@ async def alerts(alert : Alert):
         raise HTTPException(status_code=400, detail="Could not create alert")
 
 @app.get("/scenarios/")
-async def scenarios(request: Request):
+async def scenarios(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("scenarios.html", {"request" : request})
 
 @app.get("/subpages/scenarioInformation/")
-async def scenarioInformation(request: Request):
+async def scenarioInformation(request: Request, user: User = Depends(manager)):
     check_alert: dict = await alert_collection.find_one({})
     if not check_alert:
         raise HTTPException(status_code=404, detail="No alerts found")
@@ -131,15 +132,15 @@ async def scenarioInformation(request: Request):
     })
 
 @app.get("/report/")
-async def report(request: Request):
+async def report(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("scenarioReport.html", {"request": request})
 
 @app.get("/recon/")
-async def recon(request: Request):
+async def recon(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("recon.html", {"request": request})
 
 @app.get("/recon/view_local_statement")
-async def view_local_statement(request: Request):
+async def view_local_statement(request: Request, user: User = Depends(manager)):
     taxpayers = []
 
     async for taxpayer in taxpayer_collection.find():
@@ -149,27 +150,27 @@ async def view_local_statement(request: Request):
     return templates.TemplateResponse("subpages/queryReport.html", {"request": request, "taxpayers": taxpayers, "totalRecords": len(taxpayers)})
 
 @app.get("/query/")
-async def query(request: Request):
+async def query(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("query.html", {"request": request})
 
 @app.get("/subpages/queryMenu/")
-async def queryMenu(request: Request):
+async def queryMenu(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("subpages/queryMenu.html", {"request": request})
 
 @app.get("/subpages/guidedQuery/")
-async def guidedQuery(request: Request):
+async def guidedQuery(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("subpages/guidedQuery.html", {"request": request})
 
 @app.get("/subpages/adhocQuery/")
-async def adhocQuery(request: Request):
+async def adhocQuery(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("subpages/adhocQuery.html", {"request": request})
 
 @app.get("/xml/")
-async def xml(request: Request):
+async def xml(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("dataReload.html", {"request": request})
 
 @app.get("/logs/")
-async def logs(request: Request):
+async def logs(request: Request, user: User = Depends(manager)):
     return templates.TemplateResponse("logs.html", {"request": request})
 
 @app.post("/api/v1/taxpayers/add/")
