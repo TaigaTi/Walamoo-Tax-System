@@ -15,7 +15,7 @@ const colorClasses = {
     "default": "has-text-light",
     "black": "has-text-black",
     "blue": "has-text-link",
-    "green": "has-text-success"
+    "green": ["has-text-success", "is-light"]
 }
 
 const updateBodyTextColor = () => {

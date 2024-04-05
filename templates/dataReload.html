@@ -11,7 +11,7 @@
         const successContent = `
             <h1 class='subtitle'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
-            <button class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)"> Back to Dashboard </button>`
+            <button class="button is-primary" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)"> Back to Dashboard </button>`
     
         const errorContent = `
             <h1 class='subtitle'>Upload Failed!</h1>
@@ -21,7 +21,7 @@
     
         const defaultContent = `
             <img src="{{ url_for('static', path='images/upload.png') }}" alt="Upload..." width="150px" height="150px">
-            <label for='file' class='button is-success' id="fileLabel">Upload New XML File</label>
+            <label for='file' class='button is-primary' id="fileLabel">Upload New XML File</label>
             <input type='file' id='file' name='file' accept='.xml'/ required style='opacity: 0;' onchange="parseXML(this)">`
     
         const contentKeys = {
