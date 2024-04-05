@@ -11,7 +11,7 @@
         const successContent = `
             <h1 class='subtitle'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
-            <button class="button is-success" onclick="goToDashboard()"> Back to Dashboard </button>`
+            <button class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)"> Back to Dashboard </button>`
     
         const errorContent = `
             <h1 class='subtitle'>Upload Failed!</h1>
@@ -28,10 +28,6 @@
             "success": successContent,
             "error": errorContent,
             "default": defaultContent
-        }
-
-        const goToDashboard = () => {
-            window.location.href = "{{ url_for('dashboard') }}"
         }
     
         const changeContent = (contentKey, message=undefined) => {

@@ -30,7 +30,7 @@
                 </div> 
                 <div class="field">
                     <div class="control is-flex is-justify-content-center">
-                        <input type="button" value="Select" class="button is-success" onclick="goToDashboard()">
+                        <input type="button" value="Select" class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)">
                     </div>
                 </div>  
                 <div class="field">
@@ -59,8 +59,5 @@
             localStorage.setItem('language', language);
         })
 
-        function goToDashboard() {
-            window.location.href = "{{ url_for('dashboard') }}";
-        }
     </script>
 {% endblock %}
