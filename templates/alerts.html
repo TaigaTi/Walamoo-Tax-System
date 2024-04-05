@@ -6,10 +6,10 @@
 
     <div id="thresholdContainer">
         <h1 class="title">Alerts / Thresholds</h1>
-        <div class="container is-flex">
-            <div class="container">
-                <h2 class="subtitle">Enter Criteria</h2>
-                <form action="">
+        <div class="container">
+            <h2 class="subtitle">Enter Criteria</h2>
+            <form action="" class="is-fullwidth is-flex is-justify-content-space-between" onsubmit="return false">
+                <div class="container">
                     <div class="is-flex is-justify-content-space-between">
                         <div class="field">
                             <label for="min_tax" class="label">Minimum Tax</label>
@@ -59,13 +59,13 @@
                             <input type="checkbox" name="notify" id="notify" class="checkbox">
                         </label>
                     </div>
-                </form>
-            </div>
-            <div class="container">
-                <div id="buttonDiv" style="width: 60%">
-                    <button class="button is-primary is-fullwidth">Apply</button>
                 </div>
-            </div>
+                <div class="container m-3">
+                    <div id="buttonDiv" style="width: 60%">
+                        <button target="{{ url_for('dashboard') }}" class="button is-primary is-fullwidth" onclick="navToTarget(this)"> Apply </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
