@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %} Scenario Report {% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1 class="title">Scenario Report - { month }</h1>
+
+        <div class="container">
+            <h2 class="subtitle">Example</h2>
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Insufficient Taxes</th>
+                        <th>Min. Revenue</th>
+                        <th>Taxes Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Kelly's</th>
+                        <td>Sufficient</td>
+                        <td>Not Exceeded</td>
+                        <td>Paid</td>
+                    </tr>
+                    <tr>
+                        <th>Jim and Associates</th>
+                        <td>Sufficient</td>
+                        <td>Not Exceeded</td>
+                        <td>Not Paid</td>
+                    </tr>
+                    <tr>
+                        <th>Pasty's Pastries</th>
+                        <td>Insufficient</td>
+                        <td>Exceeded</td>
+                        <td>Paid</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="buttonContainer is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
+                <button class="button is-primary is-flex is-flex-direction-column m-2">
+                    <div id="dflText">011000 010010 000001 001110 010100 001100 000001 011000 000011 011000 001101 001000 000110 001100</div>
+                    <div id="engText" style="letter-spacing: 1.2em">T R A N S L A T E T O D F L</div>
+                </button>
+                <button class="button is-success" style="max-width: 40%;">Save to File</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

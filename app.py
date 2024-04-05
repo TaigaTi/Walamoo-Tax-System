@@ -33,13 +33,17 @@ async def citiesDashboard(request: Request):
 async def alerts(request: Request):
     return templates.TemplateResponse("alerts.html", {"request": request})
 
-@app.get("/scenarios")
+@app.get("/scenarios/")
 async def scenarios(request: Request):
     return templates.TemplateResponse("scenarios.html", {"request" : request})
 
-@app.get("/subpages/scenarioInformation")
+@app.get("/subpages/scenarioInformation/")
 async def scenarioInformation(request: Request):
     return templates.TemplateResponse("subpages/scenarioInformation.html", {"request" : request})
+
+@app.get("/report/")
+async def report(request: Request):
+    return templates.TemplateResponse("scenarioReport.html", {"request": request})
 
 @app.get("/query/")
 async def query(request: Request):
