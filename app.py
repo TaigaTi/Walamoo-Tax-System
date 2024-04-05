@@ -69,6 +69,10 @@ async def adhocQuery(request: Request):
 async def xml(request: Request):
     return templates.TemplateResponse("dataReload.html", {"request": request})
 
+@app.get("/logs/")
+async def logs(request: Request):
+    return templates.TemplateResponse("logs.html", {"request": request})
+
 
 if __name__ == "__main__":
     import uvicorn
