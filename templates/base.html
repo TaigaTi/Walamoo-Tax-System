@@ -31,9 +31,13 @@
                         <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px" class="has-background-grey-light" style="border-radius: 50%;">
                         <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
                             <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
+                            <hr>
                             <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
+                            <hr>
                             <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
-                            <span target="{{ url_for('index') }}"  onclick="logout(this)" class="quiet-link" aria-label="Logout" title="Logout">Logout</span>
+                            <hr>
+                            <span target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
+                            <hr>
                         </div>
                     </span>
                     <span>
