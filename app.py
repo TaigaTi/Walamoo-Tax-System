@@ -67,7 +67,7 @@ async def adhocQuery(request: Request):
 
 @app.get("/xml/")
 async def xml(request: Request):
-    return templates.TemplateResponse("xml.html", {"request": request})
+    return templates.TemplateResponse("dataReload.html", {"request": request})
 
 
 if __name__ == "__main__":

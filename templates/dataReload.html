@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} XML Reload {% endblock %}
+
+{% block content %}
+    <h1 class="title">XML Reload</h1>
+    <div id="reloadContainer"  class="container is-fullwidth is-flex is-flex-direction-column is-justify-content-space-evenly is-align-items-center has-background-grey-lighter p-3" style="min-height: 30vh; max-height: 40vh; height: 35vh; color: black;"></div>
+
+    <script>
+        const successContent = `
+            <h1 class='title'>System Data Reloaded!</h1>
+            <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
+            <button class="button is-success" onclick="changeContent('default')"> Back to Dashboard </button>`
+    
+        const errorContent = `
+            <h1 class='title'>Upload Failed!</h1>
+            <img src="{{ url_for('static', path='images/error.png') }}" alt="Upload Failed!" width="150px" height="150px">
+            <p> File was not uploaded.</p>
+            <p> Check your connection and try again. </p>
+            <button class="button is-danger" onclick="changeContent('default')"> Reload System XML Data </button>`
+    
+        const defaultContent = `
+            <img src="{{ url_for('static', path='images/upload.png') }}" alt="Upload..." width="150px" height="150px">
+            <button class='button is-primary' onclick="changeContent('success')">Upload New XML File</button>`
+    
+        const contentKeys = {
+            "success": successContent,
+            "error": errorContent,
+            "default": defaultContent
+        }
+    
+        const changeContent = (contentKey) => {
+            document.getElementById("reloadContainer").innerHTML = contentKeys[contentKey]
+        }
+    
+        changeContent("default")
+    </script>
+{% endblock %}
