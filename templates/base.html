@@ -10,9 +10,11 @@
 </head>
 <body>
     <header class="is-flex is-justify-content-space-between is-align-items-center">
-            <span id="title" class="is-flex is-align-items-center" style="flex: 2">
-                <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
-                <h1>Walamoo Tax System </h1>
+            <span id="title" style="flex: 2">
+                <a href="{{ url_for('dashboard') }}" class="is-flex is-align-items-center" >
+                    <img src="{{ url_for('static', path='images/logo.png') }}" alt="Walamoo Logo" height="50px" width="50px">
+                    <h1>Walamoo Tax System </h1>
+                </a>
             </span>
             <span id="nav" class="is-flex is-justify-content-space-evenly is-flex-grow-1">
                 {% block nav %}
