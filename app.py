@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from models import *
+from database import user_collection
 
 app = FastAPI()
 
@@ -75,6 +76,18 @@ async def xml(request: Request):
 async def logs(request: Request):
     return templates.TemplateResponse("logs.html", {"request": request})
 
+# Much secret
+@app.post("/users/", response_model=User)
+async def create_user(user: User):
+    new_user = await user_collection.insert_one(user.model_dump(mode="json"))
+    return user
+
+@app.get("/users/{user_id}", response_model=User)
+async def get_user(user_id: int):
+    user = await user_collection.find_one({"id": user_id})
+    if user:
+        return user
+    raise HTTPException(status_code=404, detail="User not found")
 
 if __name__ == "__main__":
     import uvicorn
