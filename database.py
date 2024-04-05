@@ -33,9 +33,9 @@ async def index(request: Request):
     return db_templates.TemplateResponse("index.html", {"request": request})
 
 @db_router.post("/secret/db/create/user/")
-async def create_user(user_id: Annotated[int, Form()], username: Annotated[str, Form()], password: Annotated[str, Form()]):
+async def create_user(user_id: Annotated[int, Form()], username: Annotated[str, Form()], password: Annotated[str, Form()], is_admin: Annotated[bool, Form()]):
     try:
-        user = User(user_id=user_id, name=username, password=password)
+        user = User(user_id=user_id, name=username, password=password, is_admin=is_admin)
         new_user = await user_collection.insert_one(user.model_dump(mode="json"))
         return {"success": "User was successfully created"}
     except Exception as e:

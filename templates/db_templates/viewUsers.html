@@ -3,12 +3,14 @@
         <thead>
             <th>User ID</th>
             <th>Name</th>
+            <th>Admin</th>
         </thead>
         <tbody>
             {% for user in users %}
                 <tr>
                     <td>{{ user.user_id }}</td>
                     <td>{{ user.name }}</td>
+                    <td>{{ user.is_admin }}</td>
                 </tr>
             {% endfor %}
         </tbody>

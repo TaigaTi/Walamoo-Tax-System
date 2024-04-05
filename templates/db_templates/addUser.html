@@ -1,19 +1,30 @@
 <form action="{{ url_for('create_user') }}" method="POST">
-    <div class="container is-fullwidth is-flex is-justify-content-space-between">
-        <div class="field">
-            <label for="user_id" class="label">User ID</label>
-            <input type="number" name="user_id" id="user_id" class="input" required>
+    <div class="container is-fullwidth fixed-grid">
+        <div class="grid">
+            <div class="field cell">
+                <label for="user_id" class="label">User ID</label>
+                <input type="number" name="user_id" id="user_id" class="input" required>
+            </div>
+    
+            <div class="field cell">
+                <label for="username" class="label">Username</label>
+                <input type="text" name="username" id="username" class="input" required>
+            </div>
+            <div class="field cell">
+                <label for="password" class="label">Password!</label>
+                <input type="password" name="password" id="password" class="input" required>
+            </div>
+            <div class="field cell">
+                <label for="is_admin" class="label">Admin?</label>
+                <div class="select is-fullwidth">
+                    <select name="is_admin" id="is_admin">
+                        <option value="true">Admin</option><option value="false">Employee</option>
+                    </select>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="field">
-            <label for="username" class="label">Username</label>
-            <input type="text" name="username" id="username" class="input" required>
-        </div>
-    </div>
-    <div class="field">
-        <label for="password" class="label">Password!</label>
-        <input type="password" name="password" id="password" class="input" required>
-    </div>
     <div class="buttonContainer is-flex is-justify-content-flex-end">
         <input type="submit" value="Add User" class="button is-primary">
     </div>
