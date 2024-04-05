@@ -181,7 +181,13 @@ async def xml(request: Request, user: User = Depends(manager)):
 async def logs(request: Request, user: User = Depends(manager)):
     if not user["is_admin"]:
         raise HTTPException(status_code=403, detail="Not authorized to access this resource")
-    return templates.TemplateResponse("logs.html", {"request": request, "user": user})
+    
+    logs = []
+
+    async for log in log_collection.find():
+        logs.append(log)
+
+    return templates.TemplateResponse("logs.html", {"request": request, "user": user, "logs": logs})
 
 @app.post("/api/v1/taxpayers/add/")
 async def add_taxpayer(taxpayer: TaxPayer):

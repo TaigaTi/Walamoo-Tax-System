@@ -4,18 +4,33 @@
 
 {% block content %}
 
-    <div class="container is-fullwidth has-text-centered">
+    <div class="container is-fullwidth has-text-centered my-3">
         <h1 class="title">User Activity Login</h1>
+    </div>
 
         <table class="table is-fullwidth">
             <thead>
-                <th>Date</th>
-                <th>Time</th>
+                <th>Date Time</th>
                 <th>User ID</th>
+                <th>Name</th>
                 <th>Activity</th>
+                <th>Admin</th>
             </thead>
-            <tbody id="logTable"></tbody>
+            <tbody id="logTable">
+                {% if logs %}
+                    {% for log in logs %}
+                        <tr>
+                            <td>{{ log.time }}</td>
+                            <td>{{ log.user_id }}</td>
+                            <td>{{ log.name }}</td>
+                            <td>{{ log.activity }}</td>
+                            <td>{{ log.admin }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <h2 class="subtitle">No logs to display</h2>
+                {% endif %}
+            </tbody>
         </table>
-    </div>
 
 {% endblock %}

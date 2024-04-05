@@ -21,6 +21,12 @@
                     <span target="{{ url_for('dashboard') }}" class="nav-link" aria-label="Dashboard" title="Dashboard">Dashboard</span>
                     <span target="{{ url_for('query') }}" class="nav-link" aria-label="Query" title="Query">Query</span>
                     <span target="{{ url_for('xml') }}" class="nav-link" aria-label="XML Reload" title="XML Reload">XML</span>
+                    {% if user %}
+                        {% if user['is_admin'] %}
+                            <span target="{{ url_for('logs') }}" class="nav-link" aria-label="Admin Logs" title="Admin Logs">Logs</span>
+                            <span target="{{ url_for('secret_index') }}" class="nav-link" aria-label="Admin" title="Admin">Admin</span>
+                        {% endif %}
+                    {% endif %}
                     <span class="icon is-flex is-flex-direction-column is-justify-content-flex-start quiet-link" onclick="toggleMenu()">
                         <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px" class="has-background-grey-light" style="border-radius: 50%;">
                         <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
@@ -30,6 +36,11 @@
                             <span target="{{ url_for('index') }}"  onclick="logout(this)" class="quiet-link" aria-label="Logout" title="Logout">Logout</span>
                         </div>
                     </span>
+                    <span>
+                        {% if user %}
+                            {{ user['name'] }} | {% if user['is_admin'] %} Admin {% else %} User {% endif %}
+                        {% endif %}
+                </span>
                 {% endblock %}
             </span>
     </header>
