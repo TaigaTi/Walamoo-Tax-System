@@ -2,31 +2,120 @@
 <p>How would you like to search?</p>
 
 <div class="container is-fullwidth is-flex is-flex-direction-column my-3">
-    <button class="button is-primary m-1">Company Name</button>
-    <button class="button is-primary m-1">Total Taxes Paid</button>
-    <button class="button is-primary m-1">Country</button>
+    <button class="button is-primary m-1" onclick="prepareForm('company')">Company Name</button>
+    <button class="button is-primary m-1" onclick="prepareForm('tax')">Total Taxes Paid</button>
+    <button class="button is-primary m-1" onclick="prepareForm('country')">Country</button>
 </div>
 
-<div id="formContainer">
-    <form id="queryForm">
-        <div class="field">
-            <div class="is-fullwidth is-flex is-justify-content-space-between is-align-items-center my-2">
-                <label for="query" class="label">Searching by { queryType }:</label>
-                <div class="buttons">
-                    <button id="generateReport" class="button is-success" disabled>Generate Report</button>
-                    <button id="changeQuery" class="button is-success">Change Query Parameter</button>
-                </div>
-            </div>
-            <div class="control is-flex is-justify-content-space-between">
-                <input type="text" name="query" id="query" class="input is-flex-2" style="max-width: 90%;">
-                <input type="submit" value="Run Query" class="button is-primary">
-            </div>
-        </div>
-    </form>
-
-    <div id="queryResultDiv"></div>
-</div>
+<div id="formContainer"></div>
+<div id="queryResultDiv"></div>
 
 <script>
-    const formContainer = document.getElementById('formContainer');
+
+    const createTable = (taxPayers) => {
+        const table = document.createElement('table');
+        table.classList.add('table', 'is-fullwidth');
+
+        const thead = document.createElement('thead');
+        
+        const headers = ['Payer ID', 'Company', 'Street', 'City', 'Country', 'Tax ($)'];
+        
+        const headerRow = document.createElement('tr');
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        })
+        
+        thead.appendChild(headerRow);
+        
+        const tbody = document.createElement('tbody');
+
+        taxPayers.forEach(taxPayer => {
+            const tr = document.createElement('tr');
+            const payerID = document.createElement('td');
+            const company = document.createElement('td');
+            const street = document.createElement('td');
+            const city = document.createElement('td');
+            const country = document.createElement('td');
+            const tax = document.createElement('td');
+
+            payerID.textContent = taxPayer.payer_id;
+            company.textContent = taxPayer.company;
+            street.textContent = taxPayer.street;
+            city.textContent = taxPayer.city;
+            country.textContent = taxPayer.country;
+            tax.textContent = taxPayer.tax;
+
+            tr.appendChild(payerID);
+            tr.appendChild(company);
+            tr.appendChild(street);
+            tr.appendChild(city);
+            tr.appendChild(country);
+            tr.appendChild(tax);
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(thead);
+        table.appendChild(tbody);
+
+        return table
+    }
+
+    const setupForm = () => {
+        const formContainer = document.getElementById('formContainer');
+    
+        const queryForm = document.getElementById('queryForm');
+    
+        queryForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+    
+            const query = document.getElementById('query').value;
+            const queryType = document.getElementById('queryForm').getAttribute('param');
+
+            
+            fetch(`{{ url_for('query_taxpayers') }}?${queryType}=${query}`)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else if (response.status === 404) {
+                    document.getElementById('queryResultDiv').innerHTML = '<p>No results found</p>';
+                    return [];
+                } else {
+                    throw new Error(`Got status ${response.status} from server`);
+                }
+            })
+            .then(data => {
+                if (data.length === 0) {
+                    return;
+                }
+                document.getElementById('queryResultDiv').innerHTML = '';
+                document.getElementById('queryResultDiv').appendChild(createTable(data));
+            })
+            .catch(error => console.error(error))
+        });
+    }
+
+    const prepareForm = (queryType) => {
+        const formContainer = document.getElementById('formContainer');
+        formContainer.innerHTML = `
+        <form id="queryForm" param="{ queryType }">
+            <div class="field">
+                <div class="is-fullwidth is-flex is-justify-content-space-between is-align-items-center my-2">
+                    <label for="query" class="label">Searching by { queryType }:</label>
+                    <div class="buttons">
+                        <button id="generateReport" class="button is-success" disabled>Generate Report</button>
+                        <button id="changeQuery" class="button is-success">Change Query Parameter</button>
+                    </div>
+                </div>
+                <div class="control is-flex is-justify-content-space-between">
+                    <input type="text" name="query" id="query" class="input is-flex-2" style="max-width: 90%;">
+                    <input type="submit" value="Run Query" class="button is-primary">
+                </div>
+            </div>
+        </form>`.replace(/{ queryType }/g, queryType);
+        setupForm();
+    }
+
 </script>

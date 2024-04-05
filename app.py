@@ -3,7 +3,7 @@ from os import getenv
 
 load_dotenv()
 
-from typing import List
+from typing import Dict, List
 
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import RedirectResponse
@@ -141,6 +141,23 @@ async def get_all_taxpayers():
 async def clear_taxpayers():
     await taxpayer_collection.delete_many({})
     return {"success": "Taxpayers were successfully cleared"}
+
+
+@app.get("/api/v1/taxpayers/query/", response_model=List[TaxPayer])
+async def query_taxpayers(company: str | None = None, country: str | None = None, tax: str | None = None):
+    if not any([company, country, tax]):
+        raise HTTPException(status_code=400, detail="Invalid query")
+    
+    query_key, query_value = ("company", company) if company else ("country", country) if country else ("tax", tax)
+
+    results = []
+    async for taxpayer in taxpayer_collection.find({query_key: {"$regex": rf"{query_value}", "$options": "i"}}):
+        results.append(taxpayer)
+
+    if results:
+        return results
+    raise HTTPException(status_code=404, detail="No taxpayers found")
+
 
 # Exceptions
 @app.exception_handler(NotAuthenticatedException)
