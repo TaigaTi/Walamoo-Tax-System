@@ -12,21 +12,23 @@ const setToken = (newToken) => {
 }
 
 const colorClasses = {
-    "default": "has-text-light",
     "black": "has-text-black",
     "blue": "has-text-link",
     "green": ["has-text-success", "is-light"]
 }
 
 const updateBodyTextColor = () => {
-    let textColor = localStorage.getItem("my-walamoo-text-color") || "black"
+    let textColor = localStorage.getItem("my-walamoo-text-color")
+    if (!textColor) 
+        return;
+
     document.querySelectorAll("*").forEach((elem) => {
         for (const key in colorClasses) {
             if (elem.classList.contains(colorClasses[key])) {
                 elem.classList.remove(colorClasses[key])
             }
         }
-        // if (textColor === "default") return
+        if (textColor === "default") return
         elem.classList.add(colorClasses[textColor])
     })
 }
