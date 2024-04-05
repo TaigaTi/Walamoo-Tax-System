@@ -33,7 +33,7 @@ async def get_users():
 # Secret Routes
 
 @db_router.get("/secret/db/")
-async def index(request: Request):
+async def secret_index(request: Request):
     return db_templates.TemplateResponse("index.html", {"request": request})
 
 @db_router.post("/secret/db/create/user/")
