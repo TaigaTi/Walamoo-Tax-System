@@ -86,6 +86,15 @@ async def citiesDashboard(request: Request):
 async def alerts(request: Request):
     return templates.TemplateResponse("alerts.html", {"request": request})
 
+@app.post("/alerts/")
+async def alerts(alert : Alert):
+    await alert_collection.delete_many({})
+    try:
+        _ = await alert_collection.insert_one(alert.model_dump(mode="json"))
+        return {"success": "Alert was successfully created"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Could not create alert")
+
 @app.get("/scenarios/")
 async def scenarios(request: Request):
     return templates.TemplateResponse("scenarios.html", {"request" : request})

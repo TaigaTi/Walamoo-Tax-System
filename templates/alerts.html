@@ -8,7 +8,7 @@
         <h1 class="title">Alerts / Thresholds</h1>
         <div class="container">
             <h2 class="subtitle">Enter Criteria</h2>
-            <form action="" class="is-fullwidth is-flex is-justify-content-space-between" onsubmit="return false">
+            <form action="" class="is-fullwidth is-flex is-justify-content-space-between" onsubmit="return false" id="alertForm">
                 <div class="container">
                     <div class="is-flex is-justify-content-space-between">
                         <div class="field">
@@ -27,11 +27,11 @@
                         </div>
                     </div>
                     <div class="is-flex is-justify-content-space-around control">
-                        <label for="paid" class="radio">
-                            <input type="radio" name="paid" id="paid" class="radio">
+                        <label for="paid" class="checkbox">
+                            <input type="checkbox" name="paid" id="paid" class="checkbox">
                             Did not pay</label>
-                        <label for="paid" class="radio">
-                            <input type="radio" name="paid" id="paid" class="radio">
+                        <label for="notpaid" class="checkbox">
+                            <input type="checkbox" name="notpaid" id="notpaid" class="checkbox">
                             Did Pay</label>
                     </div>
                     <div class="field">
@@ -62,11 +62,49 @@
                 </div>
                 <div class="container m-3">
                     <div id="buttonDiv" style="width: 60%">
-                        <button target="{{ url_for('dashboard') }}" class="button is-primary is-fullwidth" onclick="navToTarget(this)"> Apply </button>
+                        <input type="submit" value="Apply" class="button is-primary is-fullwidth">
                     </div>
                 </div>
             </form>
         </div>
     </div>
+
+<script>
+    const form = document.getElementById('alertForm');
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const min_tax = document.getElementById('min_tax').value;
+        const max_tax = document.getElementById('max_tax').value;
+        const min_rev = document.getElementById('min_rev').value;
+        const paid = document.getElementById('paid').checked;
+        const notpaid = document.getElementById('notpaid').checked;
+        const deadline_month = document.getElementById('deadline_month').value;
+        const notify = document.getElementById('notify').checked;
+
+        const data = new FormData(form);
+
+        data.append("min_tax", min_tax);
+        data.append("max_tax", max_tax);
+        data.append("min_revenue", min_rev);
+        data.append("check_pay", paid);
+        data.append("check_no_pay", notpaid);
+        data.append("deadline_month", deadline_month);
+        data.append("notify", notify);
+
+        const jsonData = JSON.stringify(
+            Object.fromEntries(data.entries())
+        )
+
+        const response = await fetch("{{ url_for('alerts') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            body: data
+        });
+        
+    })
+</script>
 
 {% endblock %}

@@ -6,5 +6,5 @@ class Alert(BaseModel):
     min_revenue: int
     check_pay: bool 
     check_no_pay: bool
-    deadline: str
+    deadline_month: str
     notify: bool
