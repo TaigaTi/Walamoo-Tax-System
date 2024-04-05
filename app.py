@@ -7,7 +7,7 @@ load_dotenv()
 from typing import Dict, List
 
 from fastapi import FastAPI, Request, HTTPException, Depends
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
@@ -24,7 +24,7 @@ SECRET = getenv("SECRET_KEY")
 class NotAuthenticatedException(Exception):
     pass
 
-manager = LoginManager(SECRET, "/login", not_authenticated_exception=NotAuthenticatedException)
+manager = LoginManager(SECRET, "/login", not_authenticated_exception=NotAuthenticatedException, use_cookie=True)
 
 app.include_router(db_router)
 
@@ -49,23 +49,24 @@ async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login/")
-async def login(data: OAuth2PasswordRequestForm = Depends()):
+async def login(response: Response, data: OAuth2PasswordRequestForm = Depends()):
     user_id = data.username
     password = data.password
 
     user = await get_user_by_id(user_id)
     if not user:
         raise InvalidCredentialsException
-    print(user, user_id, password)
     if user["password"] != password:
         raise InvalidCredentialsException
     
     access_token = manager.create_access_token(data={"sub": user_id}, expires=timedelta(days=1))
+    manager.set_cookie(response, access_token)
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.get("/logout/")
-async def logout(request: Request):
-    return RedirectResponse("/login/")
+async def logout(request: Request, response: Response, user: User = Depends(manager)):
+    manager.set_cookie(response, "deleted")
+    return {"access_token": "", "token_type": "bearer"}
 
 @app.get("/preferences/")
 async def preferences(request: Request, user: User = Depends(manager)):
@@ -221,7 +222,7 @@ async def get_all_alerts():
 # Exceptions
 @app.exception_handler(NotAuthenticatedException)
 async def not_authenticated_exception_handler(request, exc):
-    return RedirectResponse("/login/")
+    return RedirectResponse(f"/login/")
 
 if __name__ == "__main__":
     import uvicorn

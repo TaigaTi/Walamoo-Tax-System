@@ -74,8 +74,8 @@
             .then(data => {
                 console.log(data);
                 if (data.access_token) {
-                    localStorage.setItem("access_token", data.access_token);
-                    window.location.href = "{{ url_for('preferences') }}";
+                    setToken(data.access_token);
+                    navigate("{{ url_for('preferences') }}", data.access_token);
                 } else {
                     alert("Invalid credentials!");
                 }

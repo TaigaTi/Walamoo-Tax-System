@@ -23,11 +23,11 @@
                     <span target="{{ url_for('xml') }}" class="nav-link" aria-label="XML Reload" title="XML Reload">XML</span>
                     <span class="icon is-flex is-flex-direction-column is-justify-content-flex-start quiet-link" onclick="toggleMenu()">
                         <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="50px" height="50px" class="has-background-grey-light" style="border-radius: 50%;">
-                        <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none">
+                        <div id="menu" class="has-background-info-dark p-2" style="border-radius: 5px; display: none; z-index: 999">
                             <span target="{{ url_for('alerts') }}" class="nav-link" aria-label="Alerts/Thresholds" title="Alerts/Thresholds">Alerts/Thresholds</span>
                             <span target="{{ url_for('scenarios') }}" class="nav-link" aria-label="Monthly Scenarios" title="Monthly Scenarios">Monthly Scenarios</span>
                             <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
-                            <span target="{{ url_for('logout') }}" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
+                            <span target="{{ url_for('index') }}"  onclick="logout(this)" class="quiet-link" aria-label="Logout" title="Logout">Logout</span>
                         </div>
                     </span>
                 {% endblock %}
@@ -51,6 +51,17 @@
     const toggleMenu = () => {
         const menu = document.getElementById("menu")
         menu.style.display = menu.style.display === "none" ? "block" : "none"
+    }
+
+    const logout = async (e) => {
+        const response = await fetch("{{ url_for('logout') }}")
+        if (response.ok){
+            const data = await response.json()
+            document.cookie = "access-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+            navToTarget(e)
+            return
+        }
+        alert("Could not log out")
     }
 </script>
 
