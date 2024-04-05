@@ -170,6 +170,15 @@ async def query_taxpayers(company: str | None = None, country: str | None = None
         return results
     raise HTTPException(status_code=404, detail="No taxpayers found")
 
+@app.get("/api/v1/alerts/", response_model=List[Alert])
+async def get_all_alerts():
+    all_alerts = []
+    async for alert in alert_collection.find():
+        all_alerts.append(alert)
+    if all_alerts:
+        return all_alerts
+    raise HTTPException(status_code=404, detail="No alerts found")
+
 
 # Exceptions
 @app.exception_handler(NotAuthenticatedException)

@@ -62,7 +62,7 @@
                 </div>
                 <div class="container m-3">
                     <div id="buttonDiv" style="width: 60%">
-                        <input type="submit" value="Apply" class="button is-primary is-fullwidth">
+                        <input type="submit" value="Apply" class="button is-primary is-fullwidth" id="applyButton">
                     </div>
                 </div>
             </form>
@@ -82,27 +82,41 @@
         const deadline_month = document.getElementById('deadline_month').value;
         const notify = document.getElementById('notify').checked;
 
-        const data = new FormData(form);
-
-        data.append("min_tax", min_tax);
-        data.append("max_tax", max_tax);
-        data.append("min_revenue", min_rev);
-        data.append("check_pay", paid);
-        data.append("check_no_pay", notpaid);
-        data.append("deadline_month", deadline_month);
-        data.append("notify", notify);
-
         const jsonData = JSON.stringify(
             Object.fromEntries(data.entries())
         )
 
+        const applyButton = document.getElementById("applyButton");
+        applyButton.classList.add("is-loading");
+
         const response = await fetch("{{ url_for('alerts') }}", {
             method: "POST",
             headers: {
-                "Content-Type": "multipart/form-data"
+                "Content-Type": "application/json"
             },
-            body: data
+            body: JSON.stringify(
+                {
+                    "min_tax": min_tax,
+                    "max_tax": max_tax,
+                    "min_revenue": min_rev,
+                    "check_pay": paid,
+                    "check_no_pay": notpaid,
+                    "deadline_month": deadline_month,
+                    "notify": notify
+                }
+            )
         });
+
+        if (response.status === 200) {
+            const data = await response.json();
+            alert(data.success);
+            navigate("{{ url_for('alerts') }}");
+        } 
+        else {
+            const data = await response.json();
+            alert(data.error);
+        }
+        applyButton.classList.remove("is-loading");
         
     })
 </script>
