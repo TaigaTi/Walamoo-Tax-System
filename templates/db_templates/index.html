@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <h1 class="title">Secret Admin Page 🤫</h1> 
+    <p>Welcome to the secret admin page used for dealing with the database. Be careful here please.</p>
+
+    <p>Hey, welcome, what can I do you for?</p>
+
+    <div class="container is-fullwidth is-flex is-justify-content-space-evenly my-4">
+        <button class="button is-primary" hx-get="{{ url_for('create_user_form') }}" hx-target="#dbContainer" hx-swap="innerHTML">Add new User</button>
+        <button class="button is-primary is-light" hx-get="{{ url_for('get_users_html') }}" hx-target="#dbContainer" hx-swap="innerHTML">View All Users</button>
+        <button class="button is-link">Add new Login History</button>
+        <button class="button is-link is-light">View All Login Histories</button>
+        <button class="button is-info">Add new Tax Payer</button>
+        <button class="button is-info is-light">View All Tax Payers</button>
+    </div>
+
+    <p>The cool buttons you press above, will control what shows up in the container below. Much wow!</p>
+
+    <div class="spacer my-5"></div>
+
+    <div id="dbContainer"></div>
+{% endblock %}

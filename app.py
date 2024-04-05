@@ -3,9 +3,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from models import *
-from database import user_collection
+from database import *
 
 app = FastAPI()
+
+app.include_router(db_router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -75,12 +77,6 @@ async def xml(request: Request):
 @app.get("/logs/")
 async def logs(request: Request):
     return templates.TemplateResponse("logs.html", {"request": request})
-
-# Much secret
-@app.post("/users/", response_model=User)
-async def create_user(user: User):
-    new_user = await user_collection.insert_one(user.model_dump(mode="json"))
-    return user
 
 @app.get("/users/{user_id}", response_model=User)
 async def get_user(user_id: int):
