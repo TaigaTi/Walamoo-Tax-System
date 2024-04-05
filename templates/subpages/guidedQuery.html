@@ -1,8 +1,32 @@
 <h1 class="title">Guided Query</h1>
 <p>How would you like to search?</p>
 
-<div class="container is-fullwidth is-flex is-flex-direction-column">
+<div class="container is-fullwidth is-flex is-flex-direction-column my-3">
     <button class="button is-primary m-1">Company Name</button>
     <button class="button is-primary m-1">Total Taxes Paid</button>
     <button class="button is-primary m-1">Country</button>
 </div>
+
+<div id="formContainer">
+    <form id="queryForm">
+        <div class="field">
+            <div class="is-fullwidth is-flex is-justify-content-space-between is-align-items-center my-2">
+                <label for="query" class="label">Searching by { queryType }:</label>
+                <div class="buttons">
+                    <button id="generateReport" class="button is-success" disabled>Generate Report</button>
+                    <button id="changeQuery" class="button is-success">Change Query Parameter</button>
+                </div>
+            </div>
+            <div class="control is-flex is-justify-content-space-between">
+                <input type="text" name="query" id="query" class="input is-flex-2" style="max-width: 90%;">
+                <input type="submit" value="Run Query" class="button is-primary">
+            </div>
+        </div>
+    </form>
+
+    <div id="queryResultDiv"></div>
+</div>
+
+<script>
+    const formContainer = document.getElementById('formContainer');
+</script>
