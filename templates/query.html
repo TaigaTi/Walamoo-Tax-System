@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %} Query {% endblock %}
+
+{% block content %}
+
+    <div id="mainQueryContainer" class="container" hx-get="{{ url_for('queryMenu') }}" hx-target="#mainQueryContainer" hx-swap="innerHTML" hx-trigger="load"></div>
+
+{% endblock %}

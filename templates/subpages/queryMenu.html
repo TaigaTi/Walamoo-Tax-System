@@ -1,0 +1,6 @@
+<h1 class="title">Query</h1>
+<p>What type of query would you like to make?</p>
+<div class="container is-fullwidth is-flex is-flex-direction-column">
+    <button class="button m-1 is-primary" hx-get="{{ url_for('guidedQuery') }}" hx-target="#mainQueryContainer" hx-swap="innerHTML">Guided Query</button>
+    <button class="button m-1 is-primary" hx-get="{{ url_for('adhocQuery') }}" hx-target="#mainQueryContainer" hx-swap="innerHTML">Ad-Hoc Query</button>
+</div>

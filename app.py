@@ -53,6 +53,18 @@ async def recon(request: Request):
 async def query(request: Request):
     return templates.TemplateResponse("query.html", {"request": request})
 
+@app.get("/subpages/queryMenu/")
+async def queryMenu(request: Request):
+    return templates.TemplateResponse("subpages/queryMenu.html", {"request": request})
+
+@app.get("/subpages/guidedQuery/")
+async def guidedQuery(request: Request):
+    return templates.TemplateResponse("subpages/guidedQuery.html", {"request": request})
+
+@app.get("/subpages/adhocQuery/")
+async def adhocQuery(request: Request):
+    return templates.TemplateResponse("subpages/adhocQuery.html", {"request": request})
+
 @app.get("/xml/")
 async def xml(request: Request):
     return templates.TemplateResponse("xml.html", {"request": request})
