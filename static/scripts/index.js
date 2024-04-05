@@ -1,24 +1,4 @@
 const navigate = (url, token=undefined) => {
-    // token = token || getToken();
-    // console.log(token);
-    // fetch(url, {
-    //     method: "GET",
-    //     headers: {
-    //         "Authorization": `Bearer ${token}`
-    //     }
-    // })
-    // .then(response => {
-    //     if (response.ok) {
-        //         window.location.href = url;
-        //     } else {
-            //         console.error("Failed to navigate:", response.statusText);
-            //         // Handle error, e.g., show a message to the user
-            //     }
-            // })
-            // .catch(error => {
-                //     console.error("Fetch error:", error);
-                //     // Handle error, e.g., show a message to the user
-                // });
     window.location.href = url;
 }
 
@@ -30,3 +10,30 @@ const navToTarget = (elem) => {
 const setToken = (newToken) => {
     document.cookie = `access-token=${newToken}; path=/; max-age=3600;`;
 }
+
+const colorClasses = {
+    "default": "has-text-dark",
+    "black": "has-text-black",
+    "blue": "has-text-link",
+    "green": "has-text-success"
+}
+
+const updateBodyTextColor = () => {
+    let textColor = localStorage.getItem("my-walamoo-text-color") || "black"
+    document.querySelectorAll("*").forEach((elem) => {
+        for (const key in colorClasses) {
+            if (elem.classList.contains(colorClasses[key])) {
+                elem.classList.remove(colorClasses[key])
+            }
+        }
+        elem.classList.add(colorClasses[textColor])
+    })
+    document.body.className = colorClasses[textColor]
+}
+
+const changeTextColor = (element) => {
+    localStorage.setItem("my-walamoo-text-color", element.value);
+    updateBodyTextColor()
+}
+
+updateBodyTextColor()

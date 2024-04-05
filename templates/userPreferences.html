@@ -12,6 +12,7 @@
                     <label for="textColor" class="label">Text Color</label>
                     <div class="select is-fullwidth">
                         <select name="textColorSelect" id="textColorSelect">
+                            <option value="black">Default</option>
                             <option value="black">Black</option>
                             <option value="green">Green</option>
                             <option value="blue">Blue</option>
@@ -29,8 +30,8 @@
                     </div>
                 </div> 
                 <div class="field">
-                    <div class="control is-flex is-justify-content-center">
-                        <input type="button" value="Select" class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)">
+                    <div class="control is-flex is-justify-content-space-around">
+                        <input type="button" value="Go to Dashboard" class="button is-success" target="{{ url_for('dashboard') }}" onclick="navToTarget(this)">
                     </div>
                 </div>  
                 <div class="field">
@@ -50,8 +51,7 @@
         const languageSelect = document.getElementById('languageSelect');
 
         textColorSelect.addEventListener('change', () => {
-            const textColor = textColorSelect.value;
-            localStorage.setItem('textColor', textColor);
+            changeTextColor(textColorSelect);
         })
 
         languageSelect.addEventListener('change', () => {

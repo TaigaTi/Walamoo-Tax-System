@@ -36,6 +36,8 @@
                             <hr>
                             <span target="{{ url_for('recon') }}" class="nav-link" aria-label="Reconciliation" title="Reconciliation">Reconciliation</span>
                             <hr>
+                            <span target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</span>
+                            <hr>
                             <span target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</span>
                             <hr>
                         </div>
@@ -56,18 +58,18 @@
 
 <script>
     const navLinks = document.querySelectorAll(".nav-link");
-
+    
     navLinks.forEach(link => {
         link.addEventListener("click", () => {
             navigate(link.getAttribute("target"))
         })
     })
-
+    
     const toggleMenu = () => {
         const menu = document.getElementById("menu")
         menu.style.display = menu.style.display === "none" ? "block" : "none"
     }
-
+    
     const logout = async (e) => {
         const response = await fetch("{{ url_for('logout') }}")
         if (response.ok){
@@ -79,7 +81,7 @@
         alert("Could not log out")
     }
 </script>
-
 <script src="{{ url_for('static', path='scripts/index.js') }}"></script>
+
 <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
 </html>

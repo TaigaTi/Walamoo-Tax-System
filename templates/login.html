@@ -7,7 +7,8 @@
     <div id="textColorDiv" class="is-flex is-flex-direction-column">
         <span id="textColor">Text Color</span>
         <div class="select">
-            <select name="textColorSelect" id="textColorSelect">
+            <select name="textColorSelect" id="textColorSelect" onchange="changeTextColor(this)">
+                <option value="default">Default</option>
                 <option value="black">Black</option>
                 <option value="green">Green</option>
                 <option value="blue">Blue</option>
