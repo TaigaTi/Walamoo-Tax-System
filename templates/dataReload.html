@@ -9,19 +9,19 @@
     <script>
 
         const successContent = `
-            <h1 class='title'>System Data Reloaded!</h1>
+            <h1 class='subtitle' style='color:black;'>System Data Reloaded!</h1>
             <img src="{{ url_for('static', path='images/success.png') }}" alt="Upload Successful!" width="150px" height="150px">
             <button class="button is-success" onclick="changeContent('default')"> Back to Dashboard </button>`
     
         const errorContent = `
-            <h1 class='title'>Upload Failed!</h1>
+            <h1 class='subtitle' style='color:black;'>Upload Failed!</h1>
             <img src="{{ url_for('static', path='images/error.png') }}" alt="Upload Failed!" width="150px" height="150px">
             { message goes here}
             <button class="button is-danger" onclick="changeContent('default')"> Reload System XML Data </button>`
     
         const defaultContent = `
             <img src="{{ url_for('static', path='images/upload.png') }}" alt="Upload..." width="150px" height="150px">
-            <label for='file' class='button is-success'>Upload New XML File</label>
+            <label for='file' class='button is-success' id="fileLabel">Upload New XML File</label>
             <input type='file' id='file' name='file' accept='.xml'/ required style='opacity: 0;' onchange="parseXML(this)">`
     
         const contentKeys = {
@@ -44,6 +44,9 @@
         const parseXML = (xml) => {
             const curFiles = xml.files;
 
+            document.getElementById("file").disabled = true;
+            document.getElementById("fileLabel").classList.add("is-loading")
+
             let error_message = undefined
 
             if (curFiles.length == 0) {
@@ -56,8 +59,7 @@
             reader.readAsText(file);
             
             reader.onerror = () => {
-                console.log("Error reading file: " + reader.error);
-                changeContent("error");
+                changeContent("error", "Error reading file: " + reader.error);
                 return
             }
             reader.onloadend = () => {
