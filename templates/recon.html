@@ -28,10 +28,10 @@
                 </div>
             </div>
         </div>
-        <div class="container is-fullwidth is-flex is-justify-content-space-around">
-            <button class="button is-primary is-dark" onclick="alert('No Bank statement has been provided as yet')">View Bank Statement</button>
-            <button class="button is-primary" hx-get="{{ url_for('view_local_statement') }}" hx-target="#scenariosContent" hx-swap="innerHTML">View Local Statement</button>
-            <button class="button is-primary is-dark" onclick="alert('Cannot calculate without bank statement')">Calculate Reconciliation</button>
+        <div class="container is-fullwidth is-flex is-justify-content-space-around can-flex-down">
+            <button class="button is-primary is-dark m-2" onclick="alert('No Bank statement has been provided as yet')">View Bank Statement</button>
+            <button class="button is-primary m-2" hx-get="{{ url_for('view_local_statement') }}" hx-target="#scenariosContent" hx-swap="innerHTML">View Local Statement</button>
+            <button class="button is-primary is-dark m-2" onclick="alert('Cannot calculate without bank statement')">Calculate Reconciliation</button>
         </div>
         <div id="scenariosContent" class="container" style="height: 50vh;">
             <p>Please select a month</p>

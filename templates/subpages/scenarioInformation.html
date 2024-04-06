@@ -1,4 +1,4 @@
-<div class="container fixed-grid">
+<div class="container fixed-grid has-1-cols-mobile">
     <div class="grid">
         <div class="cell" id="insufficientTaxesDiv">
             <h2 class="subtitle">Companies with Insufficient Taxes</h2>
@@ -26,19 +26,14 @@
                 {% endif %}
             </ul>
         </div>
-        <div class="cell" id="revenueDiv">
+        <hr>
+        <div class="cell " id="revenueDiv">
             <ul>
+                <li class="subtitle" >Extra Information</li>
                 <li>Total Revenue: $<span id="totalRevenue">{{ revenue }}</span> </li>
                 <li>Minimum Revenue: <span id="minRevenueStatus">{{ minimum_revenue }}</span> </li>
                 <li>Companies with sufficient tax: <span id="sufficientTax"> {{ sufficient_count }} </span></li>
             </ul>
         </div>
-        <!-- <div class="cell" id="nonPaidCompaniesDiv">
-            <h2 class="subtitle">Companies that did not pay</h2>
-            <ul id="nonPaidCompanies">
-                <li>Example company 1</li>
-                <li>Example company 5</li>
-            </ul>
-        </div> -->
     </div>
 </div>
