@@ -59,5 +59,8 @@ updateBodyTextColor()
 updateLanguage()
 
 document.body.addEventListener('htmx:afterOnLoad', function() {
-    updateLanguage();
+    setTimeout(() => {
+        updateLanguage()
+        updateBodyTextColor()
+    }, 400)
 });
