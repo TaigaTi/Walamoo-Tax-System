@@ -247,7 +247,7 @@ async def not_authenticated_exception_handler(request, exc):
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
-    return templates.TemplateResponse("error.html", {"request": request, "status_code": exc.status_code, "detail": exc.detail})
+    return templates.TemplateResponse("error.html", {"request": request, "status_code": exc.status_code, "detail": exc.detail}, status_code=exc.status_code)
 
 if __name__ == "__main__":
     import uvicorn

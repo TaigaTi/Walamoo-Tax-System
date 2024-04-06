@@ -74,9 +74,15 @@
             const query = document.getElementById('query').value;
             const queryType = document.getElementById('queryForm').getAttribute('param');
 
+            document.getElementById('generateReport').disabled = false;
+            document.getElementById('generateReport').addEventListener('click', generateReport);
+
+            const runQuery = document.getElementById('runQuery');
+            runQuery.classList.add('is-loading');
             
             fetch(`{{ url_for('query_taxpayers') }}?${queryType}=${query}`)
             .then(response => {
+                runQuery.classList.remove('is-loading');
                 if (response.status === 200) {
                     return response.json();
                 } else if (response.status === 404) {
@@ -88,13 +94,19 @@
             })
             .then(data => {
                 if (data.length === 0) {
+                    runQuery.classList.remove('is-loading');
                     return;
                 }
                 document.getElementById('queryResultDiv').innerHTML = '';
                 document.getElementById('queryResultDiv').appendChild(createTable(data));
+                runQuery.classList.remove('is-loading');
             })
             .catch(error => console.error(error))
         });
+    }
+
+    const generateReport = () => {
+        navigate("{{ url_for('recon') }}");
     }
 
     const prepareForm = (queryType) => {
@@ -106,12 +118,11 @@
                     <label for="query" class="label">Searching by { queryType }:</label>
                     <div class="buttons">
                         <button id="generateReport" class="button is-primary" disabled>Generate Report</button>
-                        <button id="changeQuery" class="button is-primary">Change Query Parameter</button>
                     </div>
                 </div>
                 <div class="control is-flex is-justify-content-space-between">
                     <input type="text" name="query" id="query" class="input is-flex-2" style="max-width: 90%;">
-                    <input type="submit" value="Run Query" class="button is-primary">
+                    <input type="submit" value="Run Query" id="runQuery" class="button is-primary">
                 </div>
             </div>
         </form>`.replace(/{ queryType }/g, queryType);
