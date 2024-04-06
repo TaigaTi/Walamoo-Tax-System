@@ -34,10 +34,8 @@
                             <span target="{{ url_for('secret_index') }}" class="nav-link navbar-item" aria-label="Admin" title="Admin">Admin</span>
                         {% endif %}
                     {% endif %}
-                    <span class="quiet-link navbar-item" onclick="toggleMenu()">
+                    <span class="quiet-link navbar-item is-text-align-center" onclick="toggleMenu()">
                         <img src="{{ url_for('static', path='icons/user.png') }}" alt="" width="25px" height="25px" class="has-background-grey-light" style="border-radius: 50%;">
-                    </span>
-                    <span class="navbar-item">
                         {% if user %}
                             {{ user['name'] }} | {% if user['is_admin'] %} Admin {% else %} User {% endif %}
                         {% endif %}
