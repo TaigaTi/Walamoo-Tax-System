@@ -57,3 +57,7 @@
         flex-direction: column;
     }
 }
+
+.recordContainer{
+    border: 1px solid #333;
+}

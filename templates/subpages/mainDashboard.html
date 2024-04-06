@@ -1,24 +1,24 @@
 <div class="recordContainers fixed-grid">
     <div class="grid">
-        <div class="recordContainer cell container has-background-info-dark p-5 has-text-centered" style="border-radius: 5px">
+        <div class="recordContainer cell container p-5 has-text-centered" style="border-radius: 5px">
             <div class="recordTitle subtitle">
                 Records In Database
             </div>
             <div class="recordValue" id="recordsCount"> { recordsCount } </div>
         </div>
-        <div class="recordContainer cell container has-background-info-dark p-5 has-text-centered" style="border-radius: 5px">
+        <div class="recordContainer cell container p-5 has-text-centered" style="border-radius: 5px">
             <div class="recordTitle subtitle">
                 Tax Paid This Year
             </div>
             <div class="recordValue" id="yearlyTaxPay"> { yearlyTaxPay } </div>
         </div>
-        <div class="recordContainer cell container has-background-info-dark p-5 has-text-centered" style="border-radius: 5px">
+        <div class="recordContainer cell container p-5 has-text-centered" style="border-radius: 5px">
             <div class="recordTitle subtitle">
                 Tax Paying Countries
             </div>
             <div class="recordValue" id="taxPayingCountries"> { taxPayingCountries } </div>
         </div>
-        <div class="recordContainer cell container has-background-info-dark p-5 has-text-centered" style="border-radius: 5px">
+        <div class="recordContainer cell container p-5 has-text-centered" style="border-radius: 5px">
             <div class="recordTitle subtitle">
                 Tax Paying Cities
             </div>
@@ -26,20 +26,11 @@
         </div>
     </div>
 </div>
-<div class="buttonContainer is-flex is-justify-content-space-between">
-    <button class="button is-primary" onclick="toggleDashboardBackground()">Toggle Background</button>
+<div class="buttonContainer is-flex is-justify-content-flex-end">
     <button class="button is-primary" hx-get="{{ url_for('citiesDashboard') }}" hx-target="#dashboardContent" hx-swap="innerHTML">View Cities Per Country</button>
 </div>
 
 <script>
-
-    const toggleDashboardBackground = () => {
-        document.querySelectorAll(".recordContainer").forEach((elem) => {
-            elem.classList.toggle("has-background-info-dark");
-            elem.classList.toggle("has-background-info-light");
-        })
-    }
-
     async function getAllTaxPayers() {
         let response = await fetch("{{ url_for('get_all_taxpayers') }}");
         if (!response.ok) {
