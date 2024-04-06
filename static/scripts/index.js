@@ -33,9 +33,31 @@ const updateBodyTextColor = () => {
     })
 }
 
+const updateLanguage = () => {
+    let language = localStorage.getItem("my-walamoo-language")
+    if (!language || language !== "dfl") return;
+
+    const toTranslate = document.querySelectorAll("p, h1, h2, h3, h4, h5, h6, button, td, th, label, #menu > .nav-link")
+
+    toTranslate.forEach(trans => {
+        trans.textContent = translateToDFL(trans.textContent)
+    })
+}
+
 const changeTextColor = (element) => {
     localStorage.setItem("my-walamoo-text-color", element.value);
     updateBodyTextColor()
 }
 
+const changeLanguage = (element) => {
+    localStorage.setItem("my-walamoo-language", element.value);
+    if (element.value !== "dfl") window.location.reload()
+    updateLanguage()
+}
+
 updateBodyTextColor()
+updateLanguage()
+
+document.body.addEventListener('htmx:afterOnLoad', function() {
+    updateLanguage();
+});

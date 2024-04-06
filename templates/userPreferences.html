@@ -24,6 +24,7 @@
                     <label class="label" id="language">Language</label>
                     <div class="select is-fullwidth">
                         <select name="languageSelect" id="languageSelect">
+                            <option value="---">---</option>
                             <option value="english">ENG</option>
                             <option value="dfl">DFL</option>
                         </select>
@@ -55,8 +56,7 @@
         })
 
         languageSelect.addEventListener('change', () => {
-            const language = languageSelect.value;
-            localStorage.setItem('language', language);
+            changeLanguage(languageSelect);
         })
 
     </script>

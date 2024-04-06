@@ -41,6 +41,16 @@
                         {% endif %}
                     </span>
                 {% endblock %}
+                    <div id="languageDiv" class="is-flex is-flex-direction-column">
+                        <span id="language">Language</span>
+                        <div class="select is-primary">
+                            <select name="languageSelect" id="languageSelect" onchange="changeLanguage(this)">
+                                <option value="---">---</option>
+                                <option value="english">ENG</option>
+                                <option value="dfl">DFL</option>
+                            </select>
+                        </div>
+                    </div>
             </div>
         </div>
     </nav>
@@ -51,7 +61,7 @@
         <div target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</div>
         <div target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</div>
     </div>
-    <section class="section">
+    <section class="section" id="mainSection">
         <div class="container">{% block content %}{% endblock %}</div>
     </section>
 
@@ -112,6 +122,7 @@
         
     });
 </script>
+<script src="{{ url_for('static', path='scripts/dfl.js') }}"></script>
 <script src="{{ url_for('static', path='scripts/index.js') }}"></script>
 
 <script src="https://unpkg.com/htmx.org@1.9.11" integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" crossorigin="anonymous"></script>
