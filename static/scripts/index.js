@@ -37,7 +37,7 @@ const updateLanguage = () => {
     let language = localStorage.getItem("my-walamoo-language")
     if (!language || language !== "dfl") return;
 
-    const toTranslate = document.querySelectorAll("p, h1, h2, h3, h4, h5, h6, button, td, th, label, #menu > .nav-link")
+    const toTranslate = document.querySelectorAll("p, h1, h2, h3, h4, h5, h6, button, td, th, label, #menu > .nav-link, .recordTitle, .recordValue")
 
     toTranslate.forEach(trans => {
         trans.textContent = translateToDFL(trans.textContent)

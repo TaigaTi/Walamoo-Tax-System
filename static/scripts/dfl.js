@@ -39,7 +39,7 @@ const dfl = [
 ];
 
 const translateToDFL = (text) => {
-    let inputValue = text.slice(0, 10)
+    let inputValue = text.replace(/\s/g, '').slice(0, 10);
     if (inputValue == ""){
         return
     }
@@ -52,6 +52,7 @@ const translateToDFL = (text) => {
         let idx = letters.indexOf(letter.toLowerCase())
 
         if (idx == -1){
+            result.push(letter)
             continue
         }
 
