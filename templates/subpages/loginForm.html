@@ -1,0 +1,90 @@
+<div class="card">
+    <div class="cardContent" style="padding: 5%">
+        <h1 style="text-align: center" class="title">User Login</h1>
+        <form id="loginForm">
+            <div class="field">
+                <label for="username" class="label">User ID</label>
+                <div class="control">
+                    <input class="input" type="text" name="username" id="username" required>
+                </div>
+            </div>
+            <div class="field">
+                <label for="password" class="label">Password</label>
+                <div class="control">
+                    <input class="input" type="password" name="password" id="password" required>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control is-flex is-justify-content-center">
+                    <input type="submit" value="Login" class="button is-primary">
+                </div>
+            </div>  
+        </form>
+    </div>
+</div>
+
+<script>
+    let loginAttempts;
+
+    const updateState = (state) => {
+        if (state === "success") {
+            localStorage.setItem("my-walamoo-login-attempts", 0);
+            return 
+        }
+
+        loginAttempts += 1;
+        localStorage.setItem("my-walamoo-login-attempts", loginAttempts);
+        let message;
+        let canContinue;
+        let params;
+
+        if (loginAttempts >= 3) {
+            message = "Please speak to the Government Information Systems Unit."
+            canContinue = "true"
+            params = `?message=${message}&canContinue=${canContinue}`
+            localStorage.setItem("my-walamoo-login-attempts", 0);
+        }else {
+            message = `You have ${3 - loginAttempts} login attempt(s) remaining.`
+            params = `?message=${message}`
+        }
+
+        htmx.ajax('GET', '{{ url_for("login_error") }}' + params, {
+            target: '#popupContainer',
+            swap: "innerHTML"
+        });
+    }
+
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        loginAttempts = localStorage.getItem("my-walamoo-login-attempts") && Number(localStorage.getItem("my-walamoo-login-attempts")) || 0;
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+
+        fetch("{{ url_for('login') }}", {
+            method: "POST",
+            body: formData
+        }).then(response => response.json())
+        .then(data => {
+            if (data.access_token) {
+                updateState("success")
+                setToken(data.access_token);
+                navigate("{{ url_for('preferences') }}");
+            } else {
+                updateState("error");
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            alert("An error occurred while logging in");
+        })
+    })
+</script>

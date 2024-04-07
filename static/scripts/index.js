@@ -64,3 +64,7 @@ document.body.addEventListener('htmx:afterOnLoad', function() {
         updateBodyTextColor()
     }, 400)
 });
+
+const closePopup = (id) => {
+    document.getElementById(id).remove()
+}

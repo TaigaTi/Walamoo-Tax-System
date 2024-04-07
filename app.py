@@ -46,16 +46,29 @@ async def index(user: User = Depends(manager.optional)):
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "user": None})
 
+@app.get("/login/form/")
+async def login_form(request: Request):
+    return templates.TemplateResponse("subpages/loginForm.html", {"request": request, "user": None})
+
+@app.get("/login/error/")
+async def login_error(request: Request, message: str = "", canContinue: str = None):
+    return templates.TemplateResponse("subpages/loginError.html", {
+        "request": request, 
+        "user": None,
+        "message": message,
+        "GIS": canContinue
+    })
+
 @app.post("/login/")
 async def login(response: Response, data: OAuth2PasswordRequestForm = Depends()):
     user_id = data.username
     password = data.password
 
     user = await get_user_by_id(user_id)
-    if not user:
-        raise InvalidCredentialsException
-    if user["password"] != password:
-        raise InvalidCredentialsException
+    if not user or user["password"] != password:
+        return {"error": "Invalid credentials"}
+    
+    print("User", user_id, "has valid credentials")
     
     access_token = manager.create_access_token(data={"sub": user_id}, expires=timedelta(days=1))
     manager.set_cookie(response, access_token)
