@@ -1,13 +1,13 @@
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from os import getenv
+from os import getenv, path
 
 load_dotenv()
 
 from typing import Dict, List
 
 from fastapi import FastAPI, Request, HTTPException, Depends
-from fastapi.responses import RedirectResponse, Response
+from fastapi.responses import RedirectResponse, Response, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
@@ -46,16 +46,29 @@ async def index(user: User = Depends(manager.optional)):
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request, "user": None})
 
+@app.get("/login/form/")
+async def login_form(request: Request):
+    return templates.TemplateResponse("subpages/loginForm.html", {"request": request, "user": None})
+
+@app.get("/login/error/")
+async def login_error(request: Request, message: str = "", canContinue: str = None):
+    return templates.TemplateResponse("subpages/loginError.html", {
+        "request": request, 
+        "user": None,
+        "message": message,
+        "GIS": canContinue
+    })
+
 @app.post("/login/")
 async def login(response: Response, data: OAuth2PasswordRequestForm = Depends()):
     user_id = data.username
     password = data.password
 
     user = await get_user_by_id(user_id)
-    if not user:
-        raise InvalidCredentialsException
-    if user["password"] != password:
-        raise InvalidCredentialsException
+    if not user or user["password"] != password:
+        return {"error": "Invalid credentials"}
+    
+    print("User", user_id, "has valid credentials")
     
     access_token = manager.create_access_token(data={"sub": user_id}, expires=timedelta(days=1))
     manager.set_cookie(response, access_token)
@@ -216,18 +229,34 @@ async def clear_taxpayers():
     return {"success": "Taxpayers were successfully cleared"}
 
 @app.get("/api/v1/taxpayers/query/", response_model=List[TaxPayer])
-async def query_taxpayers(company: str | None = None, country: str | None = None, tax: str | None = None):
+async def query_taxpayers(company: str | None = None, country: str | None = None, tax: str | None = None, report: bool = False, user: User = Depends(manager)):
     if not any([company, country, tax]):
         raise HTTPException(status_code=400, detail="Invalid query")
     
     query_key, query_value = ("company", company) if company else ("country", country) if country else ("tax", tax)
 
-    results = []
+    results : List[dict]= []
     async for taxpayer in taxpayer_collection.find({query_key: {"$regex": rf"{query_value}", "$options": "i"}}):
         results.append(taxpayer)
 
-    if results:
+    if results and not report:
         return results
+    if results and report:
+        filename = "static/reports/" + user['user_id'] + "_report.txt"
+        
+        with open(filename, "w") as fp:
+            keys = list(results[0].keys())[1:]
+            for key in keys:
+                fp.write(key + ", ")
+            fp.write("\n")
+
+            for result in results:
+                for key in keys:
+                    fp.write(str(result[key]) + ", ")
+                fp.write('\n')
+
+        return FileResponse(filename, 200, {"Content-Disposition": "attachment; filename=" + filename}, filename="report.txt")
+
     raise HTTPException(status_code=404, detail="No taxpayers found")
 
 @app.get("/api/v1/alerts/", response_model=List[Alert])

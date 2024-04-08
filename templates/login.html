@@ -16,76 +16,13 @@
         </div>
     </div>
 
-    <div id="languageDiv" class="is-flex is-flex-direction-column">
-        <span id="language">Language</span>
-        <div class="select is-primary">
-            <select name="languageSelect" id="languageSelect" onchange="changeLanguage(this)">
-                <option value="---">---</option>
-                <option value="english">ENG</option>
-                <option value="dfl">DFL</option>
-            </select>
-        </div>
-    </div>
+{% endblock %}
 
+{% block outside %}
+    <div id="popupContainer" style="position: absolute; top: 0; left: 0"></div>
 {% endblock %}
 
 {%  block content %} 
+    <div id="loginContainer" class="container" style="max-width: 60%; margin-top: 10%" hx-get="{{ url_for('login_form') }}" hx-target="#loginContainer" hx-swap="innerHTML" hx-trigger="load"></div>
 
-    <div id="loginContainer" class="container" style="max-width: 60%; margin-top: 10%">
-        <div class="card">
-            <div class="cardContent" style="padding: 5%">
-                <h1 style="text-align: center" class="title">User Login</h1>
-                <form id="loginForm">
-                    <div class="field">
-                        <label for="username" class="label">User ID</label>
-                        <div class="control">
-                            <input class="input" type="text" name="username" id="username">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="password" class="label">Password</label>
-                        <div class="control">
-                            <input class="input" type="password" name="password" id="password">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control is-flex is-justify-content-center">
-                            <input type="submit" value="Login" class="button is-primary">
-                        </div>
-                    </div>  
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-
-            const formData = new FormData();
-            formData.append("username", username);
-            formData.append("password", password);
-
-            fetch("{{ url_for('login') }}", {
-                method: "POST",
-                body: formData
-            }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.access_token) {
-                    setToken(data.access_token);
-                    navigate("{{ url_for('preferences') }}", data.access_token);
-                } else {
-                    alert("Invalid credentials!");
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert("An error occurred while logging in");
-            })
-        })
-    </script>
 {% endblock %}

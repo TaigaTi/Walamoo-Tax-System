@@ -2,7 +2,7 @@
 <p>How would you like to search?</p>
 
 <div class="container is-fullwidth is-flex is-flex-direction-column my-3">
-    <button class="button is-primary m-1" onclick="showAll()">View All Entries</button>
+    <button class="button is-primary m-1" onclick="queryType = 'all'; showAll()">View All Entries</button>
     <button class="button is-primary m-1" onclick="prepareForm('company')">Company Name</button>
     <button class="button is-primary m-1" onclick="prepareForm('country')">Country</button>
 </div>
@@ -11,6 +11,9 @@
 <div id="queryResultDiv"></div>
 
 <script>
+
+    let queryType = "";
+    let query = "";
 
     const createTable = (taxPayers) => {
         const table = document.createElement('table');
@@ -71,8 +74,8 @@
         queryForm.addEventListener('submit', async (event) => {
             event.preventDefault();
     
-            const query = document.getElementById('query').value;
-            const queryType = document.getElementById('queryForm').getAttribute('param');
+            query = document.getElementById('query').value;
+            queryType = document.getElementById('queryForm').getAttribute('param');
 
             document.getElementById('generateReport').disabled = false;
             document.getElementById('generateReport').addEventListener('click', generateReport);
@@ -105,8 +108,19 @@
         });
     }
 
-    const generateReport = () => {
-        navigate("{{ url_for('recon') }}");
+    const generateReport = async () => {
+        const response = await fetch(`{{ url_for('query_taxpayers') }}?report=true&${queryType}=${query}`);
+        const result = await response.blob();
+        a = document.createElement('a');
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.href = URL.createObjectURL(result);
+        a.download = `Walamoo_${queryType}_${query}_report.txt`;
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        }, 60000);
     }
 
     const prepareForm = (queryType) => {

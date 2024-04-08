@@ -61,6 +61,9 @@
         <div target="{{ url_for('preferences') }}" class="nav-link" aria-label="Preferences" title="Preferences">Preferences</div>
         <div target="{{ url_for('index') }}"  onclick="logout(this)" class="nav-link" aria-label="Logout" title="Logout">Logout</div>
     </div>
+    <div id="outside">
+        {% block outside %} {% endblock %}
+    </div>
     <section class="section" id="mainSection">
         <div class="container">{% block content %}{% endblock %}</div>
     </section>
