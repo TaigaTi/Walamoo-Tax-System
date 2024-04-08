@@ -121,8 +121,13 @@ async def scenarios(request: Request, user: User = Depends(manager)):
 @app.get("/subpages/scenarioInformation/")
 async def scenarioInformation(request: Request, user: User = Depends(manager)):
     check_alert: dict = await alert_collection.find_one({})
-    if not check_alert:
-        raise HTTPException(status_code=404, detail="No alerts found")
+    taxpayers : list = taxpayer_collection.find({})
+    if not check_alert or not taxpayers:
+        return templates.TemplateResponse("subpages/scenarioInformation.html", {
+            "request" : request,
+            "user": user,
+            "error": "No alerts or taxpayers found"
+        })
     
     alert: Alert = Alert(**check_alert)
 

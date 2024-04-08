@@ -1,39 +1,43 @@
 <div class="container fixed-grid has-1-cols-mobile">
-    <div class="grid">
-        <div class="cell" id="insufficientTaxesDiv">
-            <h2 class="subtitle">Companies with Insufficient Taxes</h2>
-            <ul id="insufficientTaxes">
-                {% if insufficient_taxpayers %}
-                    {% for weak_taxpayer in insufficient_taxpayers %}
-                        <li>{{ weak_taxpayer }}</li>
-                    {% endfor %}
+    {% if error %}
+        <h2 class="has-text-centered has-text-danger subtitle"> {{ error }} </h2>
+    {% else %}
+        <div class="grid">
+            <div class="cell" id="insufficientTaxesDiv">
+                <h2 class="subtitle">Companies with Insufficient Taxes</h2>
+                <ul id="insufficientTaxes">
+                    {% if insufficient_taxpayers %}
+                        {% for weak_taxpayer in insufficient_taxpayers %}
+                            <li>{{ weak_taxpayer }}</li>
+                        {% endfor %}
+                        
+                    {% else %}
+                        <h3>Everyone paid enough?</h3>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="cell" id="paidCompaniesDiv">
+                <h2 class="subtitle">Companies that paid</h2>
+                <ul id="paidCompanies">
+                    {% if sufficient_taxpayers %}
+                        {% for paid_company in sufficient_taxpayers %}
+                            <li>{{ paid_company }}</li>
+                        {% endfor %}
                     
-                {% else %}
-                    <h3>Everyone paid enough?</h3>
-                {% endif %}
-            </ul>
+                    {% else %}
+                        <h3>No one paid enough?</h3>
+                    {% endif %}
+                </ul>
+            </div>
+            <hr>
+            <div class="cell " id="revenueDiv">
+                <ul>
+                    <li class="subtitle" >Extra Information</li>
+                    <li>Total Revenue: $<span id="totalRevenue">{{ revenue }}</span> </li>
+                    <li>Minimum Revenue: <span id="minRevenueStatus">{{ minimum_revenue }}</span> </li>
+                    <li>Companies with sufficient tax: <span id="sufficientTax"> {{ sufficient_count }} </span></li>
+                </ul>
+            </div>
         </div>
-        <div class="cell" id="paidCompaniesDiv">
-            <h2 class="subtitle">Companies that paid</h2>
-            <ul id="paidCompanies">
-                {% if sufficient_taxpayers %}
-                    {% for paid_company in sufficient_taxpayers %}
-                        <li>{{ paid_company }}</li>
-                    {% endfor %}
-                
-                {% else %}
-                    <h3>No one paid enough?</h3>
-                {% endif %}
-            </ul>
-        </div>
-        <hr>
-        <div class="cell " id="revenueDiv">
-            <ul>
-                <li class="subtitle" >Extra Information</li>
-                <li>Total Revenue: $<span id="totalRevenue">{{ revenue }}</span> </li>
-                <li>Minimum Revenue: <span id="minRevenueStatus">{{ minimum_revenue }}</span> </li>
-                <li>Companies with sufficient tax: <span id="sufficientTax"> {{ sufficient_count }} </span></li>
-            </ul>
-        </div>
-    </div>
+    {% endif %}
 </div>
